@@ -1,0 +1,48 @@
+👀 09.04 - 10:05 kolejne spotkanie 👀
+
+Podział zadań:
+Kuba 🫠
+
+
+    stworzenie notatki,
+    dodanie punktów do doumentu ze specyfikacją projektu,
+    rozwinięcie punktów razem z NIkodemem
+
+
+Nikodem 😎
+
+    dodanie informacji o interfejsie do dokemntu specyfikacji
+    rozwinięcie tematu funkcjinalności frontendu w dokumencie
+
+
+Witek 🫡
+
+    analiza dokumentu z lotu ptaka
+    może dopisać coś o testach
+
+
+Łukasz 😊
+
+    przejrzeć specyfikację frontu i backendu i zapisać wnioski jak połaczyć jedno z drugim (chyba chodzi o to żebyś wiedział co dzieje się w punktach backendu i frontendu)
+    dadać po 1 pomyśle do frontu i backendu
+
+
+Jan 😁
+
+    materiał szkoleniowy o scrumie
+    dodać coś o serverze do dokumentu
+
+
+Przemek 🙂
+
+    dodanie informacji o serverze (jego kształcie) do dokemntu specyfikacji
+    dadanie dunkcjonalnosci servera do dokumentu
+
+
+Aleks 🥳
+
+    OPIS prototypu bazy danych (opisz tabele co i jak, może nawet tak jak jest w specyfikacji u Przemka to sensowny kształt)
+    jakiś krótki opis bazy danych jak ma działać i czemu tak
+
+
+Dobrego dnia 💪
