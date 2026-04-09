@@ -1,0 +1,56 @@
+🏎️. ݁₊ ⊹ . ݁˖ . Sprint 09.04-16.04 🏁............🏎💨..
+👀 16.04 - 10:05 kolejne spotkanie 👀
+
+Podział zadań:
+Kuba 🫠
+
+    stworzenie notatki ze spotkania,
+    przejęcie obowiązków product ownera - próba stworzenia backlogu
+    rozwinięcie notatki o scrumie,
+    rozwinięcie i wygładzenie ekranów razem z Nikodemem
+
+
+Nikodem 😎
+
+    stworzyć widok logowania
+    stworzyć widok administracyjny
+
+Witek 🫡
+
+    analiza dokumentu z lotu ptaka
+    sprawdzić sensowność endpointów
+    dorobić 2 automatyczne testy
+
+
+Łukasz 😊
+
+    Ujednolicić specyfikację (front ma być spójny z backendem - przycinamy nie rozbudowujemy)
+    dodać endpointy
+    całość przygotować do 11.04 do 20:00
+
+
+Jan 😁
+
+    materiał szkoleniowy o pullrequestach
+    pilnowanie pull requestów i mergowanie na bieżąco
+    ogarnąć weryfiakcję przez 2 osoby
+
+
+Przemek 🙂
+
+    napisanie endpointów po stronie servera do obsługi:
+    - logowania
+    - zapis do bazy danych
+    - czytanie z bazy danych
+
+
+
+Aleks 🥳
+
+    załadować driver do squlite
+    stworzyć tabelę z użytkownikami w bazie danych
+    napisać zapytania do bazy zapisujące dane użytkownika i odczytujące dane użytkownika
+
+
+
+Dobrego dnia 💪
