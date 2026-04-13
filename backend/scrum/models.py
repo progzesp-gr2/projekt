@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class Project(models.Model):
     """
     Represents a main workspace or product being developed.
-    A project contains multiple epics, sprints, and tasks.
+    A project contains multiple sprints and tasks.
     """
     name = models.CharField(
         max_length=255,
@@ -90,47 +90,6 @@ class Sprint(models.Model):
         return f"{self.name} ({self.project.key})"
 
 
-class Epic(models.Model):
-    """
-    Represents a large amount of work that can be broken down into a number of
-    smaller tasks (stories).
-    """
-    class EpicStatus(models.TextChoices):
-        TODO = 'TODO', _('To do')
-        IN_PROGRESS = 'IN_PROGRESS', _('In progress')
-        DONE = 'DONE', _('Done')
-
-    name = models.CharField(
-        max_length=255,
-        help_text="A brief name summarizing the epic"
-    )
-    description = models.TextField(
-        blank=True,
-        help_text="Detailed explanation of the epic requirements and business value"
-    )
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.CASCADE,
-        related_name='epics',
-        help_text="The project this epic belongs to"
-    )
-    status = models.CharField(
-        max_length=20,
-        choices=EpicStatus.choices,
-        default=EpicStatus.TODO,
-        help_text="Current progress status of the epic"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        verbose_name = "Epic"
-        verbose_name_plural = "Epics"
-
-    def __str__(self):
-        return self.name
-
-
 class Task(models.Model):
     """
     Represents a single unit of work in the Scrum.
@@ -193,14 +152,6 @@ class Task(models.Model):
         related_name='tasks',
         help_text="The project to which this task belongs"
     )
-    epic = models.ForeignKey(
-        Epic,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='tasks',
-        help_text="Optional grouping into a larger group of related work (epic)"
-    )
     sprint = models.ForeignKey(
         Sprint,
         on_delete=models.SET_NULL,
@@ -236,40 +187,3 @@ class Task(models.Model):
 
     def __str__(self):
         return f"[{self.project.key}-{self.pk}] {self.title}"
-
-
-class Comment(models.Model):
-    """
-    Represents a discussion point or an update note attached to a specific task.
-    """
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-        related_name='comments',
-        help_text="The task this comment belongs to"
-    )
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='task_comments',
-        help_text="The user who wrote the comment"
-    )
-    content = models.TextField(
-        help_text="The body of the comment"
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        help_text="When the comment was posted"
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        help_text="When the comment was last edited"
-    )
-
-    class Meta:
-        ordering = ['created_at']
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"Comment by {self.author} on {self.task}"
