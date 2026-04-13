@@ -1,7 +1,10 @@
 # Kontrybutowanie
 
+Informacje o projekcie wraz ze specyfikacją są na [wiki](https://github.com/progzesp-gr2/projekt/wiki).
+
 Zmiany w repozytorium są wprowadzane poprzez pull requesty.
-Informacje o projekcie są na [wiki](https://github.com/progzesp-gr2/projekt/wiki).
+Pull requesty muszą przejść automatyczne testy i zostać sprawdzone przed ich zmergowaniem.
+Proces ten jest opisany poniżej.
 
 ## Pull Requesty
 
@@ -36,7 +39,22 @@ Na stronie z pull requestem (`https://github.com/progzesp-gr2/projekt/pull/[id]`
 | **Sprawdź zmiany.** | Otwórz tab *Files changed* i sprawdź zmienione pliki.<br/>Na górze po lewej możesz wybrać commity, których zmiany mają być pokazane.<br/>Podczas przeglądania zmian, możesz dodać komentarze na poziomie pliku, jednej lub kilku linii, lub całego pull requesta.<br/>Po sprawdzeniu danego pliku, możesz oznaczyć go jako *Viewed*, co oznaczy plik jako sprawdzony dla twojej informacji.<br/>Po sprawdzeniu wszystkich zmian, kliknij na *Submit review*. | ![zaznaczony tab files changed, dropdown z all commits, przycisk viewed na pliku, i przycisk submit review](./docs/prs/review-check.png) |
 | **Odpowiedz na PR.** | W popupie, który się otworzy po kliknięciu *Submit review*, możesz wpisać komentarz podsumowujący cały review, oraz wybrać czy twój review jest: **komentarzem** (który może zawierać ogólne uwagi, propozycje zmian, itp. bez pozwolenia na mergowanie), **zatwierdzeniem** (które umożliwi mergowanie i może opcjonalnie zawierać propozycje opcjonalnych zmian lub inne komentarze - powinno być zaznaczone **tylko** po sprawdzeniu **wszystkich** zmian), czy **prośbą o zmiany** (które poprosi autora o zatwierdzenie zmian lub o odpowiedź na prośbę bez pozwolenia na mergowanie). | ![zaznaczony tab files changed, dropdown z all commits, przycisk viewed na pliku, i przycisk submit review](./docs/prs/review-submit.png) |
 
-Komentarze pojawią się na stronie pull requesta.
+Komentarze pojawią się jako dyskusje na stronie pull requesta i mogą zostać zamknięte przez ich autora przy użyciu przycisku *Resolve conversation*.
+Pull requesty nie powinne być mergowane jeśli mają otwarte dyskusje odnoszące się do zawartości danego PRu (a nie n.p. propozycje późniejszych zmian, które nie będą wprowadzane w danym PR itp.).
+
 **Oczekuje się, że większość PRów przejdzie przez kilka cykli review+zmian.**
+
+Przed zmergowaniem pull requesta, osoby z wybranych teamów odpowiedzalnych za zmienione pliki muszą stworzyć review zatwierdzający zmiany (minimum dwa approvalsy w sumie, plus poniższe minima teamowe, nie licząc osoby tworzącej PR).
+
+| Team      | Minimum zatwierdzeń | Odpowiedzialne pliki         | Członkowie                                                                    |
+| --------- | ------------------- | ---------------------------- | ----------------------------------------------------------------------------- |
+| Admin     | 0\*                 | `README.md`, `/scrum/`, itp. | Kuba (@dieselP273)                                                            |
+| Backend   | 2                   | `/backend/`                  | Aleksander (@Dinolek), Łukasz (@lukasz-malec), Przemysław (@PrzemyslawWlazly) |
+| DevOps    | 0\*                 | `.github/`                   | Jan (@j-markiewicz)                                                           |
+| Frontend  | 2                   | `/frontend/`                 | Nikodem (@xmedo1), Łukasz (@lukasz-malec), Kuba (@dieselP273)                 |
+| Reviewers | 1                   | wszystkie                    | Jan (@j-markiewicz), Kuba (@dieselP273)                                       |
+| Testers   | 0\*                 | automatyczne testy           | Witold (@26d4)                                                                |
+
+\* Te zespoły mają tylko po jednej osobie, więc aby umożliwić mergowanie PRów stworzonym przez ich członków, wymaganie jest ustawione na 0. Jeśli pliki, za które te zespoły są odpowiedzialne są modyfikowane w PRach niestworzonych przez ich członków, proszę traktować te approvalsy jako wymagane.
 
 [GH Docs]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
