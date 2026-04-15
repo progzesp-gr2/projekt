@@ -49,9 +49,9 @@ Przed zmergowaniem pull requesta, osoby z wybranych teamów odpowiedzalnych za z
 | Team      | Minimum zatwierdzeń | Odpowiedzialne pliki         | Członkowie                                                                    |
 | --------- | ------------------- | ---------------------------- | ----------------------------------------------------------------------------- |
 | Admin     | 0\*                 | `README.md`, `/scrum/`, itp. | Kuba (@dieselP273)                                                            |
-| Backend   | 2                   | `/backend/`                  | Aleksander (@Dinolek), Łukasz (@lukasz-malec), Przemysław (@PrzemyslawWlazly) |
+| Backend   | 1                   | `/backend/`                  | Aleksander (@Dinolek), Łukasz (@lukasz-malec), Przemysław (@PrzemyslawWlazly) |
 | DevOps    | 0\*                 | `.github/`                   | Jan (@j-markiewicz)                                                           |
-| Frontend  | 2                   | `/frontend/`                 | Nikodem (@xmedo1), Łukasz (@lukasz-malec), Kuba (@dieselP273)                 |
+| Frontend  | 1                   | `/frontend/`                 | Nikodem (@xmedo1), Łukasz (@lukasz-malec), Kuba (@dieselP273)                 |
 | Reviewers | 1                   | wszystkie                    | Jan (@j-markiewicz), Kuba (@dieselP273)                                       |
 | Testers   | 0\*                 | automatyczne testy           | Witold (@26d4)                                                                |
 
