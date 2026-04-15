@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# nie pushujemy node modules do gita, ani wygenerowanego katalogu dist
+node_modules/
+dist/
