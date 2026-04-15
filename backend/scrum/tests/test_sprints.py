@@ -5,7 +5,7 @@ from ..models import Project, Sprint
 
 User = get_user_model()
 
-class ApiSrintNoLoginTestCase(TestCase):
+class ApiSprintNoLoginTestCase(TestCase):
 	def test_nologin(self):
 		response = self.client.get(path=reverse('task-list-create'))
 		self.assertEqual(response.status_code, 403)
