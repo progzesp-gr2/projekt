@@ -16,16 +16,16 @@ The React Compiler is not enabled on this template because of its impact on dev 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project. -->
 
 # Przygotowanie
-- Aby uruchomić widoki należy zainstalować node w wersji 22. <br>
-- Zainstalować nvm: <br>
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-- przeładować bashrc (bo system czyta bashrc tylko raz na początku uruchamiania):<br>
-source ~/.bashrc
+
+- Aby uruchomić widoki należy zainstalować node w wersji 22.
+- Zainstalować nvm: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash`
+- przeładować bashrc (bo system czyta bashrc tylko raz na początku uruchamiania): `source ~/.bashrc`
 
 # Uruchamianie
-1 - npm run build <br>
-2 - npm run dev <br>
-3 - wejście na:  http://localhost:5173/
+
+1. npm run build
+2. npm run dev
+3. wejście na:  <http://localhost:5173/>
 
 
 
