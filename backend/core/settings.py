@@ -10,16 +10,13 @@ Aby zobaczyć pełną listę ustawień i ich wartości, zobacz # Link do pełnej
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path # Importujemy obiekt Path z wbudowanej biblioteki Pythona, ułatwiający pracę ze ścieżkami na dysku.
+from pathlib import Path 
 
 # Buduj ścieżki wewnątrz projektu w ten sposób: BASE_DIR / 'katalog_podrzędny'.
 BASE_DIR = Path(__file__).resolve().parent.parent # Oblicza i zapisuje absolutną ścieżkę do głównego folderu Twojego projektu (tam, gdzie znajduje się manage.py).
 
 
-# Szybkie ustawienia programistyczne - nieodpowiednie na produkcję
-# Zobacz https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# OSTRZEŻENIE BEZPIECZEŃSTWA: trzymaj klucz tajny (secret key) w tajemnicy na produkcji!
 SECRET_KEY = 'django-insecure-##bw^k*ul)p(x14z1(9r1%@qm8s&#5%q-722f*%9x6l)98l0wf' # Unikalny, tajny klucz szyfrujący Django. Używany do hashowania sesji, tokenów i haseł. Nie udostępniaj go!
 
 # OSTRZEŻENIE BEZPIECZEŃSTWA: nie uruchamiaj z włączonym debugowaniem na produkcji!
