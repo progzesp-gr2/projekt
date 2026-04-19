@@ -1,9 +1,7 @@
-from django.urls import path # Importujemy funkcję definiującą ścieżki.
-from . import views # Importujemy widoki z lokalnego pakietu.
+from django.urls import path
+from . import views 
 
-urlpatterns = [ # Lista ścieżek specyficznych dla modułu Scrum.
-    # Usunęliśmy 'api/' z początku, bo zostanie ono dodane automatycznie przez plik główny.
-    # Dodaliśmy '/' na końcu każdego adresu dla spójności.
+urlpatterns = [ 
     
     
     # --- ENDPOINTY AUTORYZACJI ---
@@ -21,32 +19,3 @@ urlpatterns = [ # Lista ścieżek specyficznych dla modułu Scrum.
 ]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from django.urls import path # Importujemy funkcję definiującą ścieżki.
-from . import views # Importujemy widoki z lokalnego pakietu.
-
-urlpatterns = [ # Lista ścieżek specyficznych dla modułu Scrum.
-    # Usunęliśmy 'api/' z początku, bo zostanie ono dodane automatycznie przez plik główny.
-    # Dodaliśmy '/' na końcu każdego adresu dla spójności.
-    
-
-
-    path('projects/', views.ProjectListCreateView.as_view(), name='project-list-create'), # Projekty.
-    path('tasks/', views.TaskListCreateView.as_view(), name='task-list-create'), # Zadania (Lista/Tworzenie).
-    path('tasks/<int:pk>/', views.TaskUpdateView.as_view(), name='task-update'), # Konkretne zadanie (Edycja).
-    path('sprints/', views.SprintListCreateView.as_view(), name='sprint-list-create'), # Sprinty.
-]
