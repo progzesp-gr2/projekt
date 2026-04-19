@@ -1,5 +1,5 @@
-from rest_framework import serializers # Importujemy główny moduł serializers z biblioteki Django REST Framework.
-from scrum.models import Task # Importujemy model Task z głównego pliku models.py w aplikacji scrum.
+from rest_framework import serializers 
+from scrum.models import Task 
 
 class TaskSerializer(serializers.ModelSerializer): # Tworzymy klasę serializatora dziedziczącą po ModelSerializer, która zautomatyzuje konwersję na JSON.
     class Meta: # Wewnętrzna klasa Meta służy do przekazania ustawień konfiguracyjnych dla tego serializatora.
