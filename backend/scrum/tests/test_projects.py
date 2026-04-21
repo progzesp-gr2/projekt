@@ -24,7 +24,7 @@ class ApiProjectCreateTestCase(TestCase):
         del cls.userdata['password']
     
     def setUp(self) -> None:
-        self.client.login(username='jtp', password='pass')
+        self.assertTrue(self.client.login(username='jtp', password='pass'))
 
     def test_create(self):
         # self.client.login(username='jtp', password='pass')
@@ -53,8 +53,6 @@ class ApiProjectCreateTestCase(TestCase):
             self.assertEqual(project.__dict__[key], value)
 
     def test_create_with_owner(self):
-        # self.client.login(username='jtp', password='pass')
-
         projectdata = {
             'name': 'Test project',
             'key': 'test',
@@ -78,6 +76,21 @@ class ApiProjectCreateTestCase(TestCase):
         response = self.client.post(path=reverse('project-list-create'))
         self.assertEqual(response.status_code, 400)
 
+    def test_create_with_diffrent_owner(self):
+        projectdata = {
+            'name': 'Test project',
+            'key': 'test',
+            'description': 'Project for a test case',
+            'owner': 2
+        }
+
+        response = self.client.post(path=reverse('project-list-create'), data=projectdata)
+        rd = response.json()
+        project = Project.objects.get(pk=1)
+
+        self.assertEqual(rd['owner'], 1)
+        self.assertEqual(project.owner, self.user)
+
 
 class ApiProjectListTestCase(TestCase):
     @classmethod
@@ -92,7 +105,7 @@ class ApiProjectListTestCase(TestCase):
         ]
     
     def test_get_list(self):
-        self.client.login(username='jtp', password='pass')
+        self.assertTrue(self.client.login(username='jtp', password='pass'))
 
         response = self.client.get(path=reverse('project-list-create'))
         
