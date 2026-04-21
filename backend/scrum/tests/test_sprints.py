@@ -46,6 +46,12 @@ class ApiSprintCreateTestCase(TestCase):
         response = self.client.post(path=reverse('sprint-list-create'))
         self.assertEqual(response.status_code, 400)
 
+        response = self.client.post(path=reverse('sprint-list-create'), data={'name': 'test'})
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.post(path=reverse('sprint-list-create'), data={'project': 1})
+        self.assertEqual(response.status_code, 400)
+
 class ApiSprintListTestCase(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
