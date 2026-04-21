@@ -25,7 +25,11 @@ class ApiSprintCreateTestCase(TestCase):
     def test_create(self):
         data = {
             'name': 'Test Sprint',
-            'project': 1
+            'project': 1,
+            'goal': 'Goal',
+            'start_date': '2026-01-01',
+            'end_date': '2026-01-15',
+            'status': 'PLANNED'
         }
 
         response = self.client.post(path=reverse('sprint-list-create'), data=data)
@@ -36,11 +40,14 @@ class ApiSprintCreateTestCase(TestCase):
 
         self.assertEqual(sprint.project, self.project)
         self.assertEqual(sprint.name, data['name'])
+        self.assertEqual(sprint.start_date, date(2026, 1, 1))
+        self.assertEqual(sprint.end_date, date(2026, 1, 15))
+        self.assertEqual(sprint.status, Sprint.SprintStatus.PLANNED)
         self.assertIn(sprint, self.project.sprints.all()) # type: ignore
 
         rd = response.json()
 
-        self.assertEqual(rd['name'], data['name'])
+        self.assertTrue(all(rd[k] == data[k] for k in data.keys()))
     
     def test_missing(self):
         response = self.client.post(path=reverse('sprint-list-create'))
