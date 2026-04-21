@@ -35,7 +35,7 @@ class ApiSprintCreateTestCase(TestCase):
 
         self.assertEqual(sprint.project, self.project)
         self.assertEqual(sprint.name, data['name'])
-        self.assertIn(sprint, self.project.sprints.all())
+        self.assertIn(sprint, self.project.sprints.all()) # type: ignore
 
         rd = response.json()
 
