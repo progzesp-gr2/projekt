@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from datetime import date
 from ..models import Project, Sprint
 
 User = get_user_model()
@@ -53,8 +54,22 @@ class ApiSprintListTestCase(TestCase):
 
         cls.project = Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user)
         cls.sprints = [
-            Sprint.objects.create(name='Sprint 1', project=cls.project),
-            Sprint.objects.create(name='Sprint 2', project=cls.project)
+            Sprint.objects.create(
+                name='Sprint 1',
+                project=cls.project,
+                goal='Goal 1',
+                start_date=date(2026, 1, 1),
+                end_date=date(2026, 1, 15),
+                status=Sprint.SprintStatus.ACTIVE
+            ),
+            Sprint.objects.create(
+                name='Sprint 2',
+                project=cls.project,
+                goal='Goal 2',
+                start_date=date(2026, 1, 15),
+                end_date=date(2026, 1, 30),
+                status=Sprint.SprintStatus.PLANNED
+            )
         ]
 
     def setUp(self) -> None:
@@ -67,4 +82,18 @@ class ApiSprintListTestCase(TestCase):
 
         rd = response.json()
 
-        self.assertTrue((rd[0]['name'] == 'Sprint 1' and rd[1]['name'] == 'Sprint 2') or (rd[1]['name'] == 'Sprint 1' and rd[0]['name'] == 'Sprint 2'))
+        for sprint in rd:
+            self.assertEqual(sprint['project'], 1)
+            match sprint['name']:
+                case 'Sprint 1':
+                    self.assertEqual(sprint['goal'], 'Goal 1')
+                    self.assertEqual(sprint['start_date'], '2026-01-01')
+                    self.assertEqual(sprint['end_date'], '2026-01-15')
+                    self.assertEqual(sprint['status'], 'ACTIVE')
+                case 'Sprint 2':
+                    self.assertEqual(sprint['goal'], 'Goal 2')
+                    self.assertEqual(sprint['start_date'], '2026-01-15')
+                    self.assertEqual(sprint['end_date'], '2026-01-30')
+                    self.assertEqual(sprint['status'], 'PLANNED')
+                case _:
+                    self.fail()
