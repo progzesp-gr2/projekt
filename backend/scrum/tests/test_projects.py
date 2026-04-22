@@ -86,7 +86,7 @@ class ApiProjectCreateTestCase(TestCase):
 
         response = self.client.post(path=reverse('project-list-create'), data=projectdata)
         rd = response.json()
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(pk=rd['id'])
 
         self.assertEqual(rd['owner'], 1)
         self.assertEqual(project.owner, self.user)
