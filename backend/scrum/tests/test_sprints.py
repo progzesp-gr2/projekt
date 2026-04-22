@@ -36,7 +36,9 @@ class ApiSprintCreateTestCase(TestCase):
 
         self.assertEqual(response.status_code, 201)
 
-        sprint = Sprint.objects.get(pk=1)
+        rd = response.json()
+
+        sprint = Sprint.objects.get(pk=rd['id'])
 
         self.assertEqual(sprint.project, self.project)
         self.assertEqual(sprint.name, data['name'])
@@ -44,8 +46,6 @@ class ApiSprintCreateTestCase(TestCase):
         self.assertEqual(sprint.end_date, date(2026, 1, 15))
         self.assertEqual(sprint.status, Sprint.SprintStatus.PLANNED)
         self.assertIn(sprint, self.project.sprints.all()) # type: ignore
-
-        rd = response.json()
 
         self.assertTrue(all(rd[k] == data[k] for k in data.keys()))
     
