@@ -6,12 +6,32 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // roboczo, do testu
-    if (username === 'admin' && password === 'admin') {
-      navigate('/admin');
+  // polaczenie z backendem
+  //  polaczenie z baza oraz gerneracja json token
+  const res = await fetch('http://localhost:8000/api/auth/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // zapis tokenów
+      localStorage.setItem('access', data.access);
+      localStorage.setItem('refresh', data.refresh);
+
+      navigate('/dashboard');
+    } else {
+      console.log("Błąd logowania", data);
     }
   };
 
