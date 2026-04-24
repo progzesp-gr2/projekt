@@ -188,3 +188,10 @@ class ApiSprintListTestCase(TestCase):
                     self.assertEqual(sprint['status'], 'PLANNED')
                 case _:
                     self.fail()
+
+    def test_get_list_empty(self):
+        response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'COMPLETED'}) # type: ignore
+        self.assertEqual(response.status_code, 200)
+
+        rd = response.json()
+        self.assertEqual(len(rd), 0)
