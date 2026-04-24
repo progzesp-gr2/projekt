@@ -20,7 +20,7 @@ class ApiSprintCreateTestCase(TestCase):
         cls.project = Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user)
 
     def setUp(self) -> None:
-        self.assertTrue(self.client.login(username='jtp', password='pass'))
+        self.client.force_login(self.user)
 
     def test_create(self):
         data = {
