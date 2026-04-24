@@ -65,11 +65,14 @@ class ApiSprintListTestCase(TestCase):
         userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
         cls.user = User.objects.create_user(**userdata)
 
-        cls.project = Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user)
+        cls.projects = [
+            Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user),
+            Project.objects.create(name='Bar', key='bar', description='zzzzz', owner=cls.user)
+        ]
         cls.sprints = [
             Sprint.objects.create(
                 name='Sprint 1',
-                project=cls.project,
+                project=cls.projects[0],
                 goal='Goal 1',
                 start_date=date(2026, 1, 1),
                 end_date=date(2026, 1, 15),
@@ -77,8 +80,16 @@ class ApiSprintListTestCase(TestCase):
             ),
             Sprint.objects.create(
                 name='Sprint 2',
-                project=cls.project,
+                project=cls.projects[0],
                 goal='Goal 2',
+                start_date=date(2026, 1, 15),
+                end_date=date(2026, 1, 30),
+                status=Sprint.SprintStatus.PLANNED
+            ),
+            Sprint.objects.create(
+                name='Sprint 3',
+                project=cls.projects[1],
+                goal='Goal 3',
                 start_date=date(2026, 1, 15),
                 end_date=date(2026, 1, 30),
                 status=Sprint.SprintStatus.PLANNED
@@ -96,15 +107,88 @@ class ApiSprintListTestCase(TestCase):
         rd = response.json()
 
         for sprint in rd:
-            self.assertEqual(sprint['project'], 1)
             match sprint['name']:
                 case 'Sprint 1':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
                     self.assertEqual(sprint['goal'], 'Goal 1')
                     self.assertEqual(sprint['start_date'], '2026-01-01')
                     self.assertEqual(sprint['end_date'], '2026-01-15')
                     self.assertEqual(sprint['status'], 'ACTIVE')
                 case 'Sprint 2':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
                     self.assertEqual(sprint['goal'], 'Goal 2')
+                    self.assertEqual(sprint['start_date'], '2026-01-15')
+                    self.assertEqual(sprint['end_date'], '2026-01-30')
+                    self.assertEqual(sprint['status'], 'PLANNED')
+                case 'Sprint 3':
+                    self.assertEqual(sprint['project'], self.projects[1].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 3')
+                    self.assertEqual(sprint['start_date'], '2026-01-15')
+                    self.assertEqual(sprint['end_date'], '2026-01-30')
+                    self.assertEqual(sprint['status'], 'PLANNED')
+                case _:
+                    self.fail()
+    
+    def test_get_list_project1(self):
+        response = self.client.get(path=reverse('sprint-list-create'), query_params={'project': self.projects[0].pk}) # type: ignore
+
+        self.assertEqual(response.status_code, 200)
+
+        rd = response.json()
+
+        for sprint in rd:
+            match sprint['name']:
+                case 'Sprint 1':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 1')
+                    self.assertEqual(sprint['start_date'], '2026-01-01')
+                    self.assertEqual(sprint['end_date'], '2026-01-15')
+                    self.assertEqual(sprint['status'], 'ACTIVE')
+                case 'Sprint 2':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 2')
+                    self.assertEqual(sprint['start_date'], '2026-01-15')
+                    self.assertEqual(sprint['end_date'], '2026-01-30')
+                    self.assertEqual(sprint['status'], 'PLANNED')
+                case _:
+                    self.fail()
+    
+    def test_get_list_active(self):
+        response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'ACTIVE'}) # type: ignore
+
+        self.assertEqual(response.status_code, 200)
+
+        rd = response.json()
+
+        for sprint in rd:
+            match sprint['name']:
+                case 'Sprint 1':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 1')
+                    self.assertEqual(sprint['start_date'], '2026-01-01')
+                    self.assertEqual(sprint['end_date'], '2026-01-15')
+                    self.assertEqual(sprint['status'], 'ACTIVE')
+                case _:
+                    self.fail()
+    
+    def test_get_list_planned(self):
+        response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'PLANNED'}) # type: ignore
+
+        self.assertEqual(response.status_code, 200)
+
+        rd = response.json()
+
+        for sprint in rd:
+            match sprint['name']:
+                case 'Sprint 2':
+                    self.assertEqual(sprint['project'], self.projects[0].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 2')
+                    self.assertEqual(sprint['start_date'], '2026-01-15')
+                    self.assertEqual(sprint['end_date'], '2026-01-30')
+                    self.assertEqual(sprint['status'], 'PLANNED')
+                case 'Sprint 3':
+                    self.assertEqual(sprint['project'], self.projects[1].pk)
+                    self.assertEqual(sprint['goal'], 'Goal 3')
                     self.assertEqual(sprint['start_date'], '2026-01-15')
                     self.assertEqual(sprint['end_date'], '2026-01-30')
                     self.assertEqual(sprint['status'], 'PLANNED')
