@@ -35,7 +35,7 @@ class ApiTaskCreateTestCase(TestCase):
         cls.project = Project.objects.create(**cls.projectdata)
     
     def setUp(self) -> None:
-        self.assertTrue(self.client.login(username='jtp', password='pass'))
+        self.client.force_login(self.user)
 
     def test_create(self):
         taskdata = {

@@ -24,11 +24,9 @@ class ApiProjectCreateTestCase(TestCase):
         del cls.userdata['password']
     
     def setUp(self) -> None:
-        self.assertTrue(self.client.login(username='jtp', password='pass'))
+        self.client.force_login(self.user)
 
     def test_create(self):
-        # self.client.login(username='jtp', password='pass')
-
         projectdata: dict[str, Any] = {
             'name': 'Test project',
             'key': 'test',
@@ -105,7 +103,7 @@ class ApiProjectListTestCase(TestCase):
         ]
     
     def test_get_list(self):
-        self.assertTrue(self.client.login(username='jtp', password='pass'))
+        self.client.force_login(self.user)
 
         response = self.client.get(path=reverse('project-list-create'))
         
