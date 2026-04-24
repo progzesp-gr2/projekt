@@ -171,8 +171,8 @@ class ApiSprintListTestCase(TestCase):
                 case _:
                     self.fail()
     
-    def test_get_list_planned(self):
-        response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'PLANNED'}) # type: ignore
+    def test_get_list_planned_project2(self):
+        response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'PLANNED', 'project': self.projects[1].pk}) # type: ignore
 
         self.assertEqual(response.status_code, 200)
 
@@ -180,12 +180,6 @@ class ApiSprintListTestCase(TestCase):
 
         for sprint in rd:
             match sprint['name']:
-                case 'Sprint 2':
-                    self.assertEqual(sprint['project'], self.projects[0].pk)
-                    self.assertEqual(sprint['goal'], 'Goal 2')
-                    self.assertEqual(sprint['start_date'], '2026-01-15')
-                    self.assertEqual(sprint['end_date'], '2026-01-30')
-                    self.assertEqual(sprint['status'], 'PLANNED')
                 case 'Sprint 3':
                     self.assertEqual(sprint['project'], self.projects[1].pk)
                     self.assertEqual(sprint['goal'], 'Goal 3')
