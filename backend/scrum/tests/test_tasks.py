@@ -181,7 +181,7 @@ class ApiTaskListTestCase(TestCase):
         ]
     
     def setUp(self) -> None:
-        self.assertTrue(self.client.login(username='jtp', password='pass'))
+        self.client.force_login(self.user)
 
     def test_get_list(self):
         response = self.client.get(path=reverse('task-list-create'))
@@ -303,3 +303,109 @@ class ApiTaskListTestCase(TestCase):
         rd = response.json()
 
         self.assertEqual(len(rd), 0)
+
+class ApiTaskUpdateTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='jtp', password='pass', first_name='Jan', last_name='Tępy', email='jtp@example.com')
+        cls.projects = [
+            Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user),
+            Project.objects.create(name='Bar', key='bar', description='zzzzz', owner=cls.user)
+        ]
+        cls.sprints = [
+            Sprint.objects.create(
+                name='Sprint 1',
+                project=cls.projects[0],
+                goal='Goal 1',
+                start_date=date(2026, 1, 1),
+                end_date=date(2026, 1, 15),
+                status=Sprint.SprintStatus.ACTIVE
+            ),
+            Sprint.objects.create(
+                name='Sprint 2',
+                project=cls.projects[0],
+                goal='Goal 2',
+                start_date=date(2026, 1, 15),
+                end_date=date(2026, 1, 30),
+                status=Sprint.SprintStatus.PLANNED
+            ),
+            Sprint.objects.create(
+                name='Sprint 3',
+                project=cls.projects[1],
+                goal='Goal 3',
+                start_date=date(2026, 1, 15),
+                end_date=date(2026, 1, 30),
+                status=Sprint.SprintStatus.PLANNED
+            )
+        ]
+
+        cls.tasks = [
+            Task.objects.create(
+                title='Task 1',
+                project=cls.projects[0],
+                sprint=cls.sprints[1],
+                reporter=cls.user,
+                assignee=cls.user,
+                description='desc 1',
+                task_type=Task.TaskType.STORY,
+                status=Task.TaskStatus.TODO,
+                priority=Task.TaskPriority.LOW
+            ),
+            Task.objects.create(
+                title='Task 2',
+                project=cls.projects[0],
+                sprint=cls.sprints[1],
+                reporter=cls.user,
+                assignee=cls.user,
+                description='desc 2',
+                task_type=Task.TaskType.BUG,
+                status=Task.TaskStatus.IN_PROGRESS,
+                priority=Task.TaskPriority.MEDIUM
+            ),
+            Task.objects.create(
+                title='Task 3',
+                project=cls.projects[1],
+                sprint=cls.sprints[2],
+                reporter=cls.user,
+                assignee=cls.user,
+                description='desc 3',
+                task_type=Task.TaskType.BUG,
+                status=Task.TaskStatus.IN_REVIEW,
+                priority=Task.TaskPriority.MEDIUM
+            )
+        ]
+    
+    def setUp(self):
+        self.client.force_login(self.user)
+    
+    def test_update(self):
+        patchdata = {'description': 'changed'}
+
+        response = self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]), data=patchdata, content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+
+        rd = response.json()
+
+        expect = {
+            'id': self.tasks[0].pk,
+            'title': 'Task 1',
+            'project': self.projects[0].pk,
+            'sprint':self.sprints[1].pk,
+            'reporter': self.user.pk,
+            'assignee': self.user.pk,
+            'description': 'changed',
+            'task_type': 'STORY',
+            'status': 'TODO',
+            'priority': 'LOW'
+        }
+
+        for key, value in expect.items():
+            self.assertEqual(rd[key], value)
+
+        self.assertEqual(Task.objects.get(pk=self.tasks[0].pk).description, 'changed')
+
+    def test_update_bad(self):
+        response = self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]), data={'reporter': 2}, content_type='application/json')
+
+        self.assertEqual(Task.objects.get(pk=self.tasks[0].pk).reporter_id, 1) # type: ignore

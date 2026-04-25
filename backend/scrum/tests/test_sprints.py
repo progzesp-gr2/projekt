@@ -97,7 +97,7 @@ class ApiSprintListTestCase(TestCase):
         ]
 
     def setUp(self) -> None:
-        self.client.login(username='jtp', password='pass')
+        self.client.force_login(self.user)
 
     def test_get_list(self):
         response = self.client.get(path=reverse('sprint-list-create'))
