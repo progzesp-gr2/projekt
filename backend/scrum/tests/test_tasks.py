@@ -44,9 +44,10 @@ class ApiTaskCreateTestCase(TestCase):
         }
 
         response = self.client.post(path=reverse('task-list-create'), data=taskdata)
-        rd = response.json()
-
         self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response['content-type'], 'application/json')
+        rd = response.json()
 
         taskdata['reporter'] = get_user(self.client).pk
 
@@ -71,9 +72,10 @@ class ApiTaskCreateTestCase(TestCase):
         }
 
         response = self.client.post(path=reverse('task-list-create'), data=taskdata)
-        rd = response.json()
-
         self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response['content-type'], 'application/json')
+        rd = response.json()
 
         taskdata['reporter'] = get_user(self.client).pk
 
@@ -103,6 +105,7 @@ class ApiTaskCreateTestCase(TestCase):
 
         response = self.client.post(path=reverse('task-list-create'), data=taskdata)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         task = Task.objects.get(pk=rd['id'])
 
@@ -188,6 +191,7 @@ class ApiTaskListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for task in rd:
@@ -223,6 +227,7 @@ class ApiTaskListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for task in rd:
@@ -251,6 +256,7 @@ class ApiTaskListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for task in rd:
@@ -279,6 +285,7 @@ class ApiTaskListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for task in rd:
@@ -300,6 +307,7 @@ class ApiTaskListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         self.assertEqual(len(rd), 0)
@@ -385,6 +393,7 @@ class ApiTaskUpdateTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         expect = {
@@ -406,6 +415,6 @@ class ApiTaskUpdateTestCase(TestCase):
         self.assertEqual(Task.objects.get(pk=self.tasks[0].pk).description, 'changed')
 
     def test_update_bad(self):
-        response = self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]), data={'reporter': 2}, content_type='application/json')
+        self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]), data={'reporter': 2}, content_type='application/json')
 
         self.assertEqual(Task.objects.get(pk=self.tasks[0].pk).reporter_id, 1) # type: ignore

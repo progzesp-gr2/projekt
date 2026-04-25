@@ -19,9 +19,8 @@ class ApiProjectNoLoginTestCase(TestCase):
 class ApiProjectCreateTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
-        cls.user = User.objects.create_user(**cls.userdata)
-        del cls.userdata['password']
+        userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
+        cls.user = User.objects.create_user(**userdata)
     
     def setUp(self) -> None:
         self.client.force_login(self.user)
@@ -34,6 +33,7 @@ class ApiProjectCreateTestCase(TestCase):
         }
 
         response = self.client.post(path=reverse('project-list-create'), data=projectdata)
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         self.assertEqual(response.status_code, 201)
@@ -59,9 +59,13 @@ class ApiProjectCreateTestCase(TestCase):
         }
 
         response = self.client.post(path=reverse('project-list-create'), data=projectdata)
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
-        self.assertEqual(response.status_code, 201)
+        for key, value in projectdata.items():
+            self.assertEqual(rd[key], value)
 
         project = Project.objects.get(pk=1)
         projectdata['owner_id'] = projectdata['owner']
@@ -83,6 +87,8 @@ class ApiProjectCreateTestCase(TestCase):
         }
 
         response = self.client.post(path=reverse('project-list-create'), data=projectdata)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         project = Project.objects.get(pk=rd['id'])
 
@@ -108,19 +114,18 @@ class ApiProjectListTestCase(TestCase):
         response = self.client.get(path=reverse('project-list-create'))
         
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         
-        self.assertTrue(isinstance(rd, list))
+        self.assertIsInstance(rd, list)
 
-        cd = {}
-
-        for p in rd:
-            cd[p['key']] = (p['name'], p['description'])
-        
-        self.assertIn('foo', cd.keys())
-        self.assertIn('bar', cd.keys())
-        
-        self.assertEqual(cd['foo'][0], 'Foo')
-        self.assertEqual(cd['foo'][1], 'Lorem ipsum dolor sit amet')
-        self.assertEqual(cd['bar'][0], 'Bar')
-        self.assertEqual(cd['bar'][1], 'zzzzz')
+        for proj in rd:
+            match proj['key']:
+                case 'foo':
+                    self.assertEqual(proj['name'], 'Foo')
+                    self.assertEqual(proj['description'], 'Lorem ipsum dolor sit amet')
+                case 'bar':
+                    self.assertEqual(proj['name'], 'Bar')
+                    self.assertEqual(proj['description'], 'zzzzz')
+                case _:
+                    self.fail()
