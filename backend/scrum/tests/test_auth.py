@@ -7,7 +7,7 @@ User = get_user_model()
 # Create your tests here.
 
 class ApiRegisterTestCase(TestCase):
-    def test1(self):
+    def test_create(self):
         data = {'username': 'jtp', 'password': 'test', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
 
         response = self.client.post(
@@ -25,6 +25,12 @@ class ApiRegisterTestCase(TestCase):
         for key, value in data.items():
             self.assertEqual(rd[key], value)
             self.assertEqual(user.__dict__[key], value)
+
+    def test_missing(self):
+        response = self.client.post(path=reverse('auth-register'))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
 
 
 class ApiAuthTestCase(TestCase):
