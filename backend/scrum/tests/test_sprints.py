@@ -36,6 +36,7 @@ class ApiSprintCreateTestCase(TestCase):
 
         self.assertEqual(response.status_code, 201)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         sprint = Sprint.objects.get(pk=rd['id'])
@@ -104,6 +105,7 @@ class ApiSprintListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for sprint in rd:
@@ -134,6 +136,7 @@ class ApiSprintListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for sprint in rd:
@@ -158,6 +161,7 @@ class ApiSprintListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for sprint in rd:
@@ -176,6 +180,7 @@ class ApiSprintListTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
 
         for sprint in rd:
@@ -192,6 +197,6 @@ class ApiSprintListTestCase(TestCase):
     def test_get_list_empty(self):
         response = self.client.get(path=reverse('sprint-list-create'), query_params={'status': 'COMPLETED'}) # type: ignore
         self.assertEqual(response.status_code, 200)
-
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         self.assertEqual(len(rd), 0)

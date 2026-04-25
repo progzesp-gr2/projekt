@@ -20,6 +20,7 @@ class ApiRegisterTestCase(TestCase):
         del data['password']
 
         user = User.objects.get(pk=1)
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         for key, value in data.items():
             self.assertEqual(rd[key], value)
@@ -51,6 +52,7 @@ class ApiAuthTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
         for key, value in self.userdata.items():
             self.assertEqual(rd[key], value)
