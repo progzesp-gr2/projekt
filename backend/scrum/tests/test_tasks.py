@@ -21,18 +21,17 @@ class ApiTaskNoLoginTestCase(TestCase):
 class ApiTaskCreateTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
-        cls.user = User.objects.create_user(**cls.userdata)
-        del cls.userdata['password']
+        userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
+        cls.user = User.objects.create_user(**userdata)
         
-        cls.projectdata = {
+        projectdata = {
             'name': 'Test project',
             'key': 'test',
             'description': 'Project for a test case',
             'owner': cls.user
         }
 
-        cls.project = Project.objects.create(**cls.projectdata)
+        cls.project = Project.objects.create(**projectdata)
     
     def setUp(self) -> None:
         self.client.force_login(self.user)
