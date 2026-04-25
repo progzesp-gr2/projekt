@@ -417,3 +417,27 @@ class ApiTaskUpdateTestCase(TestCase):
         self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]), data={'reporter': 2}, content_type='application/json')
 
         self.assertEqual(Task.objects.get(pk=self.tasks[0].pk).reporter_id, 1) # type: ignore
+    
+    def test_update_empty(self):
+        response = self.client.patch(path=reverse('task-update', args=[self.tasks[0].pk]))
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response['content-type'], 'application/json')
+        rd = response.json()
+
+        expect = {
+            'id': self.tasks[0].pk,
+            'title': 'Task 1',
+            'project': self.projects[0].pk,
+            'sprint':self.sprints[1].pk,
+            'reporter': self.user.pk,
+            'assignee': self.user.pk,
+            'description': 'desc 1',
+            'task_type': 'STORY',
+            'status': 'TODO',
+            'priority': 'LOW'
+        }
+
+        for key, value in expect.items():
+            self.assertEqual(rd[key], value)
