@@ -78,7 +78,7 @@ class ApiProjectCreateTestCase(TestCase):
         response = self.client.post(path=reverse('project-list-create'))
         self.assertEqual(response.status_code, 400)
 
-    def test_create_with_diffrent_owner(self):
+    def test_create_with_different_owner(self):
         projectdata = {
             'name': 'Test project',
             'key': 'test',
