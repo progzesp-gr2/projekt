@@ -4,8 +4,6 @@ from django.urls import reverse
 
 User = get_user_model()
 
-# Create your tests here.
-
 class ApiRegisterTestCase(TestCase):
     def test_create(self):
         data = {'username': 'jtp', 'password': 'test', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
