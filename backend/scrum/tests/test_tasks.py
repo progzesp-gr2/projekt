@@ -95,7 +95,7 @@ class ApiTaskCreateTestCase(TestCase):
         response = self.client.post(path=reverse('task-list-create'))
         self.assertEqual(response.status_code, 400)
 
-    def test_create_with_diffrent_reporter(self):
+    def test_create_with_different_reporter(self):
         taskdata = {
             'title': 'Test Task',
             'project': 1,
