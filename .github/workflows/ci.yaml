@@ -7,10 +7,12 @@ on:
 
 jobs:
   placeholder:
-    name: Placeholder
+    name: Backend Tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - run: /bin/true
+      - run: |
+          cd backend
+          python3 manage.py test
