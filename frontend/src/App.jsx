@@ -3,6 +3,7 @@ import Login from './pages/LoginPage';
 import Admin from './pages/AdminPage';
 import Register from './pages/RegisterPage';
 import Dashboard from './pages/DashboardPage';
+import User from './pages/User';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/user" element={<User />} />
       </Routes>
     </Router>
   );
