@@ -1,0 +1,54 @@
+🏎️. ݁₊ ⊹ . ݁˖ . Sprint 16.04 - 30.04  🏁............🏎💨..
+👀  - 10:05 kolejne spotkanie 👀
+
+Podział zadań:
+Kuba 🫠
+
+    stworzenie notatki ze spotkania,
+    backlog w głónym widoku dla danego projektu:
+    - product owner dodaje zadania i nadaje im priorytety
+
+
+
+Nikodem 😎
+    po połaczeniu frontu z backendem:
+    - dodawanie zadań dla członków zespołu
+
+
+Witek 🫡
+
+    rozmowa do CI z devops
+    wprowadzenie testów
+    opowiedzieć w 3 min co to znaczy dla zespołu
+
+
+Łukasz 😊
+
+    próba połączenia frontu z backendem (do 24.04.2026)
+    porozumiewanie z zespołem frontu/backendu/devops
+
+
+
+Jan 😁
+
+    rozmowa do CI z testesrem
+    pomoc w pull requestach i mergowanie na bieżąco
+    analiza pull requestów - komentarze
+    dobre paraktyki - komentarze 2 min - (o docstringach, https://peps.python.org/pep-0257/) (Ciekawostka o automatycznym formatowaniu)
+
+
+
+Przemek 🙂
+
+    zastosować poprawki Janka (usunięcie komentarzy - do 19.04)
+    dodanie tylko funcjonalności - backendu (to co napisałeś że dodałeś nowego 10:23 - 16.04 na dc)
+
+
+Aleks 🥳
+
+    komunikacja w sprawie połaczenia frontendu z backendem
+    pomysł - dodanie informacji o pisaniu komentarzy - dobre paraktyki
+
+
+
+Dobrego dnia 💪

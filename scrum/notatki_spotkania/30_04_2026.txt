@@ -1,0 +1,59 @@
+-----------------------------------------------------------
+🏎️. ݁₊ ⊹ . ݁˖ . Sprint 30.04 - 07.05  🏁............🏎💨..
+👀  08:15 spotkanie z Misiaszkiem 👀
+👀  10:05 planowanie kolejnego sprintu 👀
+
+
+Podział zadań:
+Kuba 🫠
+
+    stworzenie notatki ze spotkania,
+    tworzenie zespołu i dodawaniu di niego cżłonków
+    product owner dodaje zadania i nadaje im priorytety
+
+
+
+
+Nikodem 😎
+    rozmowa o frontendzie
+    implementacja ekranów:
+    - product owner
+    - srcum master
+    - programiści
+
+
+
+Witek 🫡
+
+    dodanie informacji o tym jak uruchomić testy w Readme
+    2 zdania jak to powinno wyglądać
+
+
+Łukasz 😊
+
+    Mergowanie połaczenia frontu z backendem (po wtorku 05.05)
+
+
+
+Jan 😁
+
+    pomoc przy instalacji formatki
+    pomoc w pull requestach i mergowanie na bieżąco
+    analiza pull requestów - komentarze
+    instrukcja formatki
+
+
+
+Przemek 🙂
+    Naprawa plików z komentarzami z Jankiem
+
+
+
+Aleks 🥳
+
+    pomoc w połączeniu frontu z Backendem Łukaszowi
+    implementacja ról projektowych
+
+
+
+Dobrego dnia 💪
