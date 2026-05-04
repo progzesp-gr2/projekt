@@ -17,6 +17,67 @@ export default function AdminPage() {
     { id: 'AA', name: 'Admin Admin', email: 'admin@admin.pl', role: 'Administrator', tasks: 1 },
   ]);
 
+  // tymczasowi programiści w do testów
+  const [programmers] = useState([
+    { id: 'P1', name: 'Jan Kowalski', email: 'jan@test.pl', role: 'Programmer' },
+    { id: 'P2', name: 'Anna Nowak', email: 'anna@test.pl', role: 'Programmer' },
+    { id: 'P3', name: 'Piotr Zielinski', email: 'piotr@test.pl', role: 'Programmer' },
+  ]);
+
+  const [projects, setProjects] = useState([
+    {
+      id: 1,
+      name: 'ScrumBoard App',
+      description: 'Aplikacja do zarządzania projektami scrumowymi',
+      members: [],
+    },
+  ]);
+
+  const [selectedProjectId, setSelectedProjectId] = useState(1);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newProjectDescription, setNewProjectDescription] = useState('');
+
+  const selectedProject = projects.find(
+  (project) => project.id === selectedProjectId
+  );
+
+  const handleCreateProject = (e) => {
+    e.preventDefault();
+
+    if (!newProjectName.trim()) return;
+
+  const newProject = {
+    id: Date.now(),
+    name: newProjectName,
+    description: newProjectDescription,
+    members: [],
+  };
+
+    setProjects([...projects, newProject]);
+    setSelectedProjectId(newProject.id);
+    setNewProjectName('');
+    setNewProjectDescription('');
+  };
+
+  const handleAddProgrammer = (programmer, projectId) => {
+    setProjects((prevProjects) =>
+      prevProjects.map((project) => {
+        if (project.id !== projectId) return project;
+
+        const alreadyAdded = project.members.some(
+          (member) => member.id === programmer.id
+        );
+
+        if (alreadyAdded) return project;
+
+        return {
+          ...project,
+          members: [...project.members, programmer],
+        };
+      })
+    );
+  };
+
   return (
     <div className="flex-1 flex flex-col p-8 text-left bg-gray-50/30">
       <header className="flex justify-between items-center mb-10">
@@ -67,15 +128,6 @@ export default function AdminPage() {
             </button>
           ))}
         </div>
-        
-        {activeTab === 'users' && (
-          <button 
-            className="px-6 py-2 rounded-lg text-white font-bold text-sm transition-all hover:scale-[1.02]"
-            style={{ backgroundColor: 'var(--accent)' }}
-          >
-            + Dodaj użytkownika
-          </button>
-        )}
       </div>
 
       {/* content zakładki*/}
@@ -118,12 +170,175 @@ export default function AdminPage() {
               ))}
             </tbody>
           </table>
-        ) : (
-          /* placeholder */
-          <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
-            <h2 className="mb-2">Wkrótce</h2>
-          </div>
-        )}
+                  ) : activeTab === 'projects' ? (
+            <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+              {/* Lista projektów */}
+              <div className="lg:col-span-1">
+                <h3 className="font-bold mb-4" style={{ color: 'var(--text-h)' }}>
+                  Aktualne projekty
+                </h3>
+
+                <div className="space-y-3">
+                  {projects.map((project) => (
+                    <button
+                      key={project.id}
+                      onClick={() => setSelectedProjectId(project.id)}
+                      className={`w-full text-left p-4 rounded-lg border transition-all ${
+                        selectedProjectId === project.id ? 'ring-2' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--code-bg)',
+                        borderColor: 'var(--border)',
+                        ringColor: 'var(--accent)',
+                      }}
+                    >
+                      <p className="font-bold">{project.name}</p>
+                      <p className="text-sm opacity-60">
+                        Członkowie: {project.members.length}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Szczegóły projektu */}
+              <div className="lg:col-span-1">
+                <h3 className="font-bold mb-4" style={{ color: 'var(--text-h)' }}>
+                  Szczegóły projektu
+                </h3>
+
+                {selectedProject && (
+                  <div
+                    className="p-5 rounded-lg border"
+                    style={{
+                      backgroundColor: 'var(--code-bg)',
+                      borderColor: 'var(--border)',
+                    }}
+                  >
+                    <h2 className="text-xl font-bold mb-2">{selectedProject.name}</h2>
+                    <p className="text-sm opacity-70 mb-6">
+                      {selectedProject.description || 'Brak opisu projektu'}
+                    </p>
+
+                    <h4 className="font-bold mb-3">Programiści w projekcie</h4>
+
+                    {selectedProject.members.length === 0 ? (
+                      <p className="text-sm opacity-60">
+                        Brak dodanych programistów.
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {selectedProject.members.map((member) => (
+                          <div
+                            key={member.id}
+                            className="p-3 rounded border text-sm"
+                            style={{ borderColor: 'var(--border)' }}
+                          >
+                            <p className="font-bold">{member.name}</p>
+                            <p className="opacity-60">{member.email}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Tworzenie projektu + dodawanie ludzi */}
+              <div className="lg:col-span-1 space-y-6">
+
+                <form
+                  onSubmit={handleCreateProject}
+                  className="p-5 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--code-bg)',
+                    borderColor: 'var(--border)',
+                  }}
+                >
+                  <h3 className="font-bold mb-4">Utwórz nowy projekt</h3>
+
+                  <input
+                    type="text"
+                    value={newProjectName}
+                    onChange={(e) => setNewProjectName(e.target.value)}
+                    placeholder="Nazwa projektu"
+                    className="w-full px-4 py-2 mb-3 rounded border"
+                    style={{
+                      backgroundColor: 'var(--bg)',
+                      borderColor: 'var(--border)',
+                    }}
+                  />
+
+                  <textarea
+                    value={newProjectDescription}
+                    onChange={(e) => setNewProjectDescription(e.target.value)}
+                    placeholder="Opis projektu"
+                    className="w-full px-4 py-2 mb-3 rounded border resize-none"
+                    rows="3"
+                    style={{
+                      backgroundColor: 'var(--bg)',
+                      borderColor: 'var(--border)',
+                    }}
+                  />
+
+                  <button
+                    type="submit"
+                    className="w-full py-2 rounded-lg font-bold text-white"
+                    style={{ backgroundColor: 'var(--accent)' }}
+                  >
+                    Dodaj projekt
+                  </button>
+                </form>
+
+                <div
+                  className="p-5 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--code-bg)',
+                    borderColor: 'var(--border)',
+                  }}
+                >
+                  <h3 className="font-bold mb-4">Dodaj programistę</h3>
+
+                  <div className="space-y-3">
+                    {programmers.map((programmer) => { //żeby nie dodawać 2 razy tego samego gościa
+                      const alreadyAdded = selectedProject?.members.some(
+                        (member) => member.id === programmer.id
+                      ) || false;
+
+                      return (
+                        <div
+                          key={programmer.id}
+                          className="p-3 rounded border flex justify-between items-center"
+                          style={{ borderColor: 'var(--border)' }}
+                        >
+                          <div>
+                            <p className="font-bold text-sm">{programmer.name}</p>
+                            <p className="text-xs opacity-60">{programmer.email}</p>
+                          </div>
+
+                          <button
+                            onClick={() => handleAddProgrammer(programmer, selectedProject.id)}
+                            disabled={alreadyAdded}
+                            className="px-3 py-1 rounded text-xs font-bold text-white disabled:opacity-40"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                          >
+                            {alreadyAdded ? 'Dodany' : 'Dodaj'}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
+              <h2 className="mb-2">Wkrótce</h2>
+            </div>
+          )}
+
+        {/* tutaj koniec */}
       </div>
     </div>
   );
