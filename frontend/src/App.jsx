@@ -3,7 +3,7 @@ import Login from './pages/LoginPage';
 import Admin from './pages/AdminPage';
 import Register from './pages/RegisterPage';
 import Dashboard from './pages/DashboardPage';
-import User from './pages/User';
+import User from './pages/UserPage';
 
 function App() {
   return (
