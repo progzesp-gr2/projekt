@@ -75,7 +75,7 @@ export default function LoginPage() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 rounded-lg font-bold text-white transition-all hover:opacity-90"
+              className="w-full py-3 rounded-lg font-bold text-white transition-all hover:opacity-90 cursor-pointer"
               style={{ backgroundColor: 'var(--accent)' }}
             >
               Zaloguj się
