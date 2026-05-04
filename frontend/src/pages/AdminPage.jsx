@@ -19,9 +19,9 @@ export default function AdminPage() {
 
   // tymczasowi programiści w do testów
   const [programmers] = useState([
-    { id: 'P1', name: 'Jan Kowalski', email: 'jan@test.pl', role: 'Programmer' },
-    { id: 'P2', name: 'Anna Nowak', email: 'anna@test.pl', role: 'Programmer' },
-    { id: 'P3', name: 'Piotr Zielinski', email: 'piotr@test.pl', role: 'Programmer' },
+    { id: 'P1', name: 'Jan Kowalski', email: 'jan@example.com', role: 'Programmer' },
+    { id: 'P2', name: 'Anna Nowak', email: 'anna@domena.test', role: 'Programmer' },
+    { id: 'P3', name: 'Piotr Zielinski', email: 'piotr@test.example', role: 'Programmer' },
   ]);
 
   const [projects, setProjects] = useState([
