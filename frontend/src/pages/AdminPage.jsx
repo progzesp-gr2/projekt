@@ -38,7 +38,7 @@ export default function AdminPage() {
   const [newProjectDescription, setNewProjectDescription] = useState('');
 
   const selectedProject = projects.find(
-  (project) => project.id === selectedProjectId
+    (project) => project.id === selectedProjectId
   );
 
   const handleCreateProject = (e) => {
