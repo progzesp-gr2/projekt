@@ -304,7 +304,7 @@ export default function AdminPage() {
                             <button
                               type="button"
                               onClick={() => handleRemoveMemberFromProject(selectedProject.id, member.id)}
-                              className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
+                              className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 cursor-pointer"
                               title="Usuń członka z zespołu"
                             >
                               Usuń
@@ -392,7 +392,7 @@ export default function AdminPage() {
                           <button
                             onClick={() => handleAddProgrammer(programmer, selectedProject.id)}
                             disabled={alreadyAdded}
-                            className="px-3 py-1 rounded text-xs font-bold text-white disabled:opacity-40 cursor-pointer"
+                            className={`px-3 py-1 rounded text-xs font-bold text-white disabled:opacity-40 ${alreadyAdded ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                             style={{ backgroundColor: 'var(--accent)' }}
                           >
                             {alreadyAdded ? 'Dodany' : 'Dodaj'}
