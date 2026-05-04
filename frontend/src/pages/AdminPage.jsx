@@ -138,14 +138,21 @@ export default function AdminPage() {
 
       {/* nawigacja zakładek */}
       <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-2 p-1 rounded-lg bg-gray-100 border" style={{ borderColor: 'var(--border)' }}>
+        <div
+          className="flex gap-2 p-1 rounded-lg border"
+          style={{ backgroundColor: 'var(--code-bg)', borderColor: 'var(--border)' }}
+        >
           {['users', 'projects', 'settings'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all cursor-pointer ${
-                activeTab === tab ? 'bg-white shadow-sm opacity-100' : 'opacity-60 hover:opacity-100'
+                activeTab === tab ? 'shadow-sm opacity-100' : 'opacity-60 hover:opacity-100'
               }`}
+              style={{
+                backgroundColor: activeTab === tab ? 'var(--bg)' : 'transparent',
+                color: activeTab === tab ? 'var(--text-h)' : 'inherit'
+              }}
             >
               {tab === 'users' && 'Użytkownicy'}
               {tab === 'projects' && 'Projekty'}
