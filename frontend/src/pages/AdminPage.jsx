@@ -44,7 +44,7 @@ export default function AdminPage() {
   const handleCreateProject = (e) => {
     e.preventDefault();
 
-    if (!newProjectName.trim()) return;
+    if (newProjectName.trim() === "") return;
 
   const newProject = {
     id: Date.now(),
