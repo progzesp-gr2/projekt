@@ -78,6 +78,23 @@ export default function AdminPage() {
     );
   };
 
+  const handleRemoveMemberFromProject = (projectId, memberId) => {
+    setProjects((prevProjects) => {
+      const updatedProjects = prevProjects.map((project) => {
+        if (project.id !== projectId) return project;
+        
+        const newMembers = project.members.filter((m) => m.id !== memberId);
+
+        return {
+          ...project,
+          members: newMembers,
+        };
+      });
+
+      return updatedProjects;
+    });
+  };
+
   return (
     <div className="flex-1 flex flex-col p-8 text-left bg-gray-50/30">
       <header className="flex justify-between items-center mb-10">
@@ -232,12 +249,21 @@ export default function AdminPage() {
                         {selectedProject.members.map((member) => (
                           <div
                             key={member.id}
-                            className="p-3 rounded border text-sm"
+                            className="p-3 rounded border text-sm flex justify-between items-center"
                             style={{ borderColor: 'var(--border)' }}
                           >
-                            <p className="font-bold">{member.name}</p>
-                            <p className="opacity-60">{member.email}</p>
-                          </div>
+                            <div>
+                              <p className="font-bold">{member.name}</p>
+                              <p className="opacity-60">{member.email}</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveMemberFromProject(selectedProject.id, member.id)}
+                              className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
+                            >
+                              Usuń
+                            </button>
+                        </div>
                         ))}
                       </div>
                     )}
