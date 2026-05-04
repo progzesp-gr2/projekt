@@ -46,12 +46,12 @@ export default function AdminPage() {
 
     if (newProjectName.trim() === "") return;
 
-  const newProject = {
-    id: Date.now(),
-    name: newProjectName,
-    description: newProjectDescription,
-    members: [],
-  };
+    const newProject = {
+      id: Date.now(),
+      name: newProjectName,
+      description: newProjectDescription,
+      members: [],
+    };
 
     setProjects([...projects, newProject]);
     setSelectedProjectId(newProject.id);
