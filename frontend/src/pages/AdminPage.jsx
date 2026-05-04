@@ -112,7 +112,7 @@ export default function AdminPage() {
         </div>
         <button 
           onClick={() => navigate('/login')}
-          className="px-4 py-2 rounded-md border text-sm font-medium hover:bg-gray-100 transition-all"
+          className="px-4 py-2 rounded-md border text-sm font-medium hover:bg-gray-100 transition-all cursor-pointer"
           style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
         >
           Wyloguj
@@ -143,7 +143,7 @@ export default function AdminPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all ${
+              className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all cursor-pointer ${
                 activeTab === tab ? 'bg-white shadow-sm opacity-100' : 'opacity-60 hover:opacity-100'
               }`}
             >
@@ -188,8 +188,8 @@ export default function AdminPage() {
                   </td>
                   <td className="p-4 text-sm font-medium">{user.tasks}</td>
                   <td className="p-4 text-right">
-                    <button className="mr-3 opacity-40 hover:opacity-100">Edytuj</button>
-                    <button className="opacity-40 hover:opacity-100 text-red-500">Usuń</button>
+                    <button className="mr-3 opacity-40 hover:opacity-100 cursor-pointer">Edytuj</button>
+                    <button className="opacity-40 hover:opacity-100 text-red-500 cursor-pointer">Usuń</button>
                   </td>
                 </tr>
               ))}
@@ -231,7 +231,7 @@ export default function AdminPage() {
                           e.stopPropagation(); 
                           handleDeleteProject(project.id);
                         }}
-                        className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
+                        className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 cursor-pointer"
                         title="Usuń projekt"
                       >
                         Usuń
@@ -334,7 +334,7 @@ export default function AdminPage() {
 
                   <button
                     type="submit"
-                    className="w-full py-2 rounded-lg font-bold text-white"
+                    className="w-full py-2 rounded-lg font-bold text-white cursor-pointer"
                     style={{ backgroundColor: 'var(--accent)' }}
                   >
                     Dodaj projekt
@@ -370,7 +370,7 @@ export default function AdminPage() {
                           <button
                             onClick={() => handleAddProgrammer(programmer, selectedProject.id)}
                             disabled={alreadyAdded}
-                            className="px-3 py-1 rounded text-xs font-bold text-white disabled:opacity-40"
+                            className="px-3 py-1 rounded text-xs font-bold text-white disabled:opacity-40 cursor-pointer"
                             style={{ backgroundColor: 'var(--accent)' }}
                           >
                             {alreadyAdded ? 'Dodany' : 'Dodaj'}

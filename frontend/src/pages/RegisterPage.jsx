@@ -81,7 +81,7 @@ export default function RegisterPage() {
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-2 rounded border"
+                className="w-full px-4 py-2 rounded border cursor-pointer"
               >
                 <option value="scrum_master">Scrum Master</option>
                 <option value="product_owner">Product Owner</option>
@@ -91,7 +91,7 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-lg font-bold text-white"
+              className="w-full py-3 rounded-lg font-bold text-white transition-all hover:opacity-90 cursor-pointer"
               style={{ backgroundColor: 'var(--accent)' }}
             >
               Zarejestruj się
