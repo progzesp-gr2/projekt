@@ -103,6 +103,21 @@ export default function AdminPage() {
     }
   };
 
+  const getRoleStyle = (role) => {
+    switch (role?.toLowerCase()) {
+      case 'administrator':
+        return 'bg-red-100 text-red-700 border-red-200';
+      case 'product owner':
+        return 'bg-purple-100 text-purple-700 border-purple-200';
+      case 'scrum master':
+        return 'bg-orange-100 text-orange-700 border-orange-200';
+      case 'programista':
+        return 'bg-blue-100 text-blue-700 border-blue-200';
+      default:
+        return 'bg-gray-100 text-gray-600 border-gray-200'; 
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col p-8 text-left bg-gray-50/30">
       <header className="flex justify-between items-center mb-10">
@@ -189,7 +204,7 @@ export default function AdminPage() {
                   </td>
                   <td className="p-4 text-sm opacity-80">{user.email}</td>
                   <td className="p-4">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-gray-100 border">
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${getRoleStyle(user.role)}`}>
                       {user.role}
                     </span>
                   </td>
