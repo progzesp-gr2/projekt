@@ -95,6 +95,14 @@ export default function AdminPage() {
     });
   };
 
+  const handleDeleteProject = (projectId) => {
+    if (!window.confirm("Czy na pewno chcesz usunąć ten projekt?")) return;
+    setProjects((prevProjects) => prevProjects.filter((p) => p.id !== projectId));
+    if (selectedProjectId === projectId) {
+      setSelectedProjectId(null);
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col p-8 text-left bg-gray-50/30">
       <header className="flex justify-between items-center mb-10">
@@ -198,10 +206,10 @@ export default function AdminPage() {
 
                 <div className="space-y-3">
                   {projects.map((project) => (
-                    <button
+                    <div
                       key={project.id}
                       onClick={() => setSelectedProjectId(project.id)}
-                      className={`w-full text-left p-4 rounded-lg border transition-all ${
+                      className={`w-full flex justify-between items-center p-4 rounded-lg border transition-all ${
                         selectedProjectId === project.id ? 'ring-2' : ''
                       }`}
                       style={{
@@ -210,11 +218,25 @@ export default function AdminPage() {
                         ringColor: 'var(--accent)',
                       }}
                     >
-                      <p className="font-bold">{project.name}</p>
-                      <p className="text-sm opacity-60">
-                        Członkowie: {project.members.length}
-                      </p>
-                    </button>
+                      <div>
+                        <p className="font-bold">{project.name}</p>
+                        <p className="text-sm opacity-60">
+                          Członkowie: {project.members.length}
+                        </p>
+                      </div>
+                      {/* Usuwanie projektu */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          handleDeleteProject(project.id);
+                        }}
+                        className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
+                        title="Usuń projekt"
+                      >
+                        Usuń
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -256,10 +278,12 @@ export default function AdminPage() {
                               <p className="font-bold">{member.name}</p>
                               <p className="opacity-60">{member.email}</p>
                             </div>
+                            {/* Usuwanie członka z zespołu */}
                             <button
                               type="button"
                               onClick={() => handleRemoveMemberFromProject(selectedProject.id, member.id)}
                               className="p-2 rounded-md text-red-500 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
+                              title="Usuń członka z zespołu"
                             >
                               Usuń
                             </button>
