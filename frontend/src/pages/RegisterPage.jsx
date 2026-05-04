@@ -6,7 +6,7 @@ export default function RegisterPage() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('programmer'); // default
+  const [role, setRole] = useState('programmer');
 
   const handleSubmit = (e) => {
     e.preventDefault();
