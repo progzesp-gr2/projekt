@@ -5,7 +5,7 @@ export default function ScrumMasterPage() {
   const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([
-    { id: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie', priority: 'Neutralny'},
+    { id: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie', priority: 'Neutralny', type: 'Feature'},
   ]);
 
   const [newTask, setNewTask] = useState('');
@@ -31,7 +31,8 @@ export default function ScrumMasterPage() {
         title: newTask,
         assignedTo: [],
         status: 'Do zrobienia',
-        priority: 'Neutralny'
+        priority: 'Neutralny',
+        type: 'feature'
       },
     ]);
 
@@ -69,6 +70,12 @@ export default function ScrumMasterPage() {
     );
   };
 
+  const handleChangeTaskType = (taskId, newType) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === taskId ? { ...task, type: newType } : task))
+    );
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'W trakcie': return 'text-yellow-500';
@@ -84,6 +91,16 @@ export default function ScrumMasterPage() {
       case 'Pilny': return 'text-orange-500';
       case 'Ważny': return 'text-purple-500';
       case 'Neutralny': return 'text-blue-500';
+      default: return 'text-gray-500';
+    }
+  };
+
+  const getTypeColor = (type) => {
+    switch (type) {
+      case 'Bug': return 'text-red-500';
+      case 'Feature': return 'text-blue-500';
+      case 'Documentation': return 'text-green-500';
+      case 'Question': return 'text-purple-500';
       default: return 'text-gray-500';
     }
   };
@@ -163,6 +180,10 @@ export default function ScrumMasterPage() {
                     
                     <p className="text-sm opacity-80">
                       Priorytet: <span className={`ml-1 ${getPriorityColor(task.priority)}`}>{task.priority}</span>
+                    </p>
+
+                    <p className="text-sm opacity-80">
+                      Typ: <span className={`ml-1 ${getTypeColor(task.type)}`}>{task.type}</span>
                     </p>
                   </div>
                 </div>
@@ -289,6 +310,37 @@ export default function ScrumMasterPage() {
                     >
                       <span className={`mr-1.5 text-[10px] ${isActive ? prioObj.dotColor : 'text-gray-400'}`}>●</span>
                       {prioObj.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Typ */}
+            <div className="mb-8">
+              <h4 className="font-bold text-sm mb-2 opacity-70">Typ zadania:</h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Bug', activeClass: 'bg-red-100 text-red-700 border-red-400', dotColor: 'text-red-500' },
+                  { label: 'Feature', activeClass: 'bg-blue-100 text-blue-700 border-blue-400', dotColor: 'text-blue-500' },
+                  { label: 'Documentation', activeClass: 'bg-emerald-100 text-emerald-700 border-emerald-400', dotColor: 'text-green-500' },
+                  { label: 'Question', activeClass: 'bg-purple-100 text-purple-700 border-purple-400', dotColor: 'text-purple-500' }
+                ].map((typeObj) => {
+                  const currentType = tasks.find((t) => t.id === editingTaskId)?.type;
+                  const isActive = currentType === typeObj.label;
+
+                  return (
+                    <button
+                      key={typeObj.label}
+                      onClick={() => handleChangeTaskType(editingTaskId, typeObj.label)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center ${
+                        isActive 
+                          ? typeObj.activeClass 
+                          : 'bg-gray-50 text-gray-400 border-transparent hover:bg-gray-100 hover:text-gray-600'
+                      }`}
+                    >
+                      <span className={`mr-1.5 text-[10px] ${isActive ? typeObj.dotColor : 'text-gray-400'}`}>●</span>
+                      {typeObj.label}
                     </button>
                   );
                 })}
