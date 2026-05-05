@@ -9,8 +9,6 @@
 | DevOps    |  -      | j-markiewicz |
 | Tester    |  -      | 26d4 |
 
-<br>
-<br>
 
 ## Informacje o Rolach w projekcie
 
