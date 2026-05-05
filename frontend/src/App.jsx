@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/LoginPage';
-import Admin from './pages/AdminPage';
+import ProductOwner from './pages/ProductOwnerPage';
 import Register from './pages/RegisterPage';
 import Dashboard from './pages/DashboardPage';
-import User from './pages/UserPage';
+import Programmer from './pages/ProgrammerPage';
+import ScrumMaster from './pages/ScrumMasterPage';
+
 
 function App() {
   return (
@@ -11,10 +13,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/programmer" element={<Programmer />} />
+        <Route path="/scrum-master" element={<ScrumMaster />} />
+        <Route path="/product-owner" element={<ProductOwner />} />
       </Routes>
     </Router>
   );

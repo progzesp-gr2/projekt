@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function AdminPage() {
+
+
+export default function ProductOwnerPage() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('users');
