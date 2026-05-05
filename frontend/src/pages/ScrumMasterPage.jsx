@@ -5,7 +5,7 @@ export default function ScrumMasterPage() {
   const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([
-    { id: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie' },
+    { id: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie', priority: 'Neutralny'},
   ]);
 
   const [newTask, setNewTask] = useState('');
@@ -17,7 +17,7 @@ export default function ScrumMasterPage() {
     { id: 'P3', name: 'Piotr Zielinski' },
   ]);
 
-  const [assignModalTaskId, setAssignModalTaskId] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -31,6 +31,7 @@ export default function ScrumMasterPage() {
         title: newTask,
         assignedTo: [],
         status: 'Do zrobienia',
+        priority: 'Neutralny'
       },
     ]);
 
@@ -54,6 +55,37 @@ export default function ScrumMasterPage() {
         return { ...task, assignedTo: updatedAssignees };
       })
     );
+  };
+
+  const handleChangeTaskStatus = (taskId, newStatus) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === taskId ? { ...task, status: newStatus } : task))
+    );
+  };
+
+  const handleChangeTaskPriority = (taskId, newPriority) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === taskId ? { ...task, priority: newPriority } : task))
+    );
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'W trakcie': return 'text-yellow-500';
+      case 'Ukończone': return 'text-green-500';
+      case 'Do zrobienia': return 'text-blue-500';
+      default: return 'text-gray-500';
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'Krytyczny': return 'text-red-500';
+      case 'Pilny': return 'text-orange-500';
+      case 'Ważny': return 'text-purple-500';
+      case 'Neutralny': return 'text-blue-500';
+      default: return 'text-gray-500';
+    }
   };
 
   return (
@@ -96,12 +128,13 @@ export default function ScrumMasterPage() {
             <input
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Nowe zadanie"
+              placeholder="Tytuł zadania"
               className="flex-1 px-4 py-2 rounded border"
               style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
             />
 
             <button
+            type="submit"
               className="px-4 py-2 rounded font-bold text-white cursor-pointer"
               style={{ backgroundColor: 'var(--accent)' }}
             >
@@ -117,20 +150,30 @@ export default function ScrumMasterPage() {
                 style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
               >
                 <div>
-                  <p className="font-bold">{task.title}</p>
-                  <p className="text-sm opacity-60">
+                  <p className="font-bold text-lg mb-2">{task.title}</p>
+                  
+                  <p className="text-sm opacity-60 mb-3">
                     Przypisane do: {task.assignedTo.length > 0 ? task.assignedTo.join(', ') : 'Brak'}
                   </p>
-                  <p className="text-sm opacity-60">Status: {task.status}</p>
+                  
+                  <div className="space-y-1">
+                    <p className="text-sm opacity-80">
+                      Status: <span className={`ml-1 ${getStatusColor(task.status)}`}>{task.status}</span>
+                    </p>
+                    
+                    <p className="text-sm opacity-80">
+                      Priorytet: <span className={`ml-1 ${getPriorityColor(task.priority)}`}>{task.priority}</span>
+                    </p>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-2 items-end">
                   <button
                     type="button"
-                    onClick={() => setAssignModalTaskId(task.id)}
+                    onClick={() => setEditingTaskId(task.id)}
                     className="px-3 py-1.5 rounded-md text-sm font-medium border hover:bg-gray-100 transition-colors cursor-pointer"
                     style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
                   >
-                    Przypisz osoby
+                    Edytuj
                   </button>
                   <button
                     type="button"
@@ -145,7 +188,7 @@ export default function ScrumMasterPage() {
           </div>
         </div>
       </div>
-      {assignModalTaskId && (
+      {editingTaskId && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div 
             className="w-full max-w-sm p-6 rounded-xl border shadow-2xl"
@@ -153,10 +196,10 @@ export default function ScrumMasterPage() {
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-bold text-lg m-0" style={{ color: 'var(--text-h)' }}>
-                Przypisz do zadania
+                Edytuj zadanie
               </h3>
               <button
-                onClick={() => setAssignModalTaskId(null)}
+                onClick={() => setEditingTaskId(null)}
                 className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors cursor-pointer opacity-50 hover:opacity-100 text-2xl"
                 title="Zamknij"
                 style={{ color: 'var(--text-h)' }}
@@ -165,29 +208,96 @@ export default function ScrumMasterPage() {
               </button>
             </div>
             
-            <div className="space-y-2 mb-6">
-              {teamMembers.map((member) => {
-                const activeTask = tasks.find((t) => t.id === assignModalTaskId);
-                const isAssigned = activeTask?.assignedTo.includes(member.name);
-                return (
-                  <label 
-                    key={member.id} 
-                    className="flex items-center gap-3 p-2 rounded hover:bg-gray-50/50 cursor-pointer border border-transparent transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isAssigned || false}
-                      onChange={() => handleToggleAssignee(assignModalTaskId, member.name)}
-                      className="w-4 h-4 cursor-pointer accent-blue-600"
-                    />
-                    <span className="font-medium text-sm">{member.name}</span>
-                  </label>
-                );
-              })}
+            {/* Przypisane osoby */}
+            <div className="mb-5">
+              <h4 className="font-bold text-sm mb-2 opacity-70">Przypisane osoby:</h4>
+              <div className="space-y-1">
+                {teamMembers.map((member) => {
+                  const activeTask = tasks.find((t) => t.id === editingTaskId);
+                  const isAssigned = activeTask?.assignedTo.includes(member.name);
+
+                  return (
+                    <label 
+                      key={member.id} 
+                      className="flex items-center gap-3 p-1.5 rounded hover:bg-gray-50/50 cursor-pointer border border-transparent transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isAssigned || false}
+                        onChange={() => handleToggleAssignee(editingTaskId, member.name)}
+                        className="w-4 h-4 cursor-pointer accent-blue-600"
+                      />
+                      <span className="font-medium text-sm">{member.name}</span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
+
+            {/* Status */}
+            <div className="mb-6">
+              <h4 className="font-bold text-sm mb-2 opacity-70">Status:</h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Do zrobienia', activeClass: 'bg-blue-100 text-blue-700 border-blue-400', dotColor: 'text-blue-500' },
+                  { label: 'W trakcie', activeClass: 'bg-yellow-100 text-yellow-700 border-yellow-400', dotColor: 'text-yellow-500' },
+                  { label: 'Ukończone', activeClass: 'bg-green-100 text-green-700 border-green-400', dotColor: 'text-green-500' }
+                ].map((statusObj) => {
+                  const currentStatus = tasks.find((t) => t.id === editingTaskId)?.status;
+                  const isActive = currentStatus === statusObj.label;
+
+                  return (
+                    <button
+                      key={statusObj.label}
+                      onClick={() => handleChangeTaskStatus(editingTaskId, statusObj.label)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center ${
+                        isActive 
+                          ? statusObj.activeClass 
+                          : 'bg-gray-50 text-gray-400 border-transparent hover:bg-gray-100 hover:text-gray-600'
+                      }`}
+                    >
+                      <span className={`mr-1.5 text-[10px] ${isActive ? statusObj.dotColor : 'text-gray-400'}`}>●</span>
+                      {statusObj.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Priorytet */}
+            <div className="mb-8">
+              <h4 className="font-bold text-sm mb-2 opacity-70">Priorytet:</h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Krytyczny', activeClass: 'bg-red-100 text-red-700 border-red-400', dotColor: 'text-red-500' },
+                  { label: 'Pilny', activeClass: 'bg-orange-100 text-orange-700 border-orange-400', dotColor: 'text-orange-500' },
+                  { label: 'Ważny', activeClass: 'bg-purple-100 text-purple-700 border-purple-400', dotColor: 'text-purple-500' },
+                  { label: 'Neutralny', activeClass: 'bg-blue-100 text-blue-700 border-blue-500', dotColor: 'text-blue-300' }
+                ].map((prioObj) => {
+                  const currentPriority = tasks.find((t) => t.id === editingTaskId)?.priority;
+                  const isActive = currentPriority === prioObj.label;
+
+                  return (
+                    <button
+                      key={prioObj.label}
+                      onClick={() => handleChangeTaskPriority(editingTaskId, prioObj.label)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center ${
+                        isActive 
+                          ? prioObj.activeClass 
+                          : 'bg-gray-50 text-gray-400 border-transparent hover:bg-gray-100 hover:text-gray-600'
+                      }`}
+                    >
+                      <span className={`mr-1.5 text-[10px] ${isActive ? prioObj.dotColor : 'text-gray-400'}`}>●</span>
+                      {prioObj.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="flex justify-end">
               <button
-                onClick={() => setAssignModalTaskId(null)}
+                onClick={() => setEditingTaskId(null)}
                 className="px-6 py-2 rounded-lg font-bold text-white cursor-pointer"
                 style={{ backgroundColor: 'var(--accent)' }}
               >
