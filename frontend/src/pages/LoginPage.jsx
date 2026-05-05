@@ -6,12 +6,20 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // roboczo, do testu
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // roboczo, do testu
     if (username === 'admin' && password === 'admin') {
-      navigate('/admin');
+      navigate('/product-owner');
+    }
+
+    if (username === 'sm' && password === 'sm') {
+      navigate('/scrum-master');
+    }
+
+    if (username === 'programmer' && password === 'programmer') {
+      navigate('/programmer');
     }
   };
 
