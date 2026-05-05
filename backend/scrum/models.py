@@ -40,6 +40,45 @@ class Project(models.Model):
         return f"{self.key} - {self.name}"
 
 
+class ProjectMembership(models.Model):
+    class ProjectRole(models.TextChoices):
+        PRODUCT_OWNER = 'PRODUCT_OWNER', _('Product owner')
+        SCRUM_MASTER = 'SCRUM_MASTER', _('Scrum master')
+        PROGRAMMER = 'PROGRAMMER', _('Programmer')
+
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='memberships',
+        help_text="Project where this user has assigned role"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='project_memberships',
+        help_text="User assigned to a project"
+    )
+    role = models.CharField(
+        max_length=20,
+        choices=ProjectRole.choices,
+        default=ProjectRole.PROGRAMMER,
+        help_text="User role within project context"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['project_id', 'user_id']
+        constraints = [
+            models.UniqueConstraint(fields=['project', 'user'], name='unique_project_membership')
+        ]
+        verbose_name = "Project membership"
+        verbose_name_plural = "Project memberships"
+
+    def __str__(self):
+        return f"{self.user} @ {self.project.key} ({self.role})"
+
+
 class Sprint(models.Model):
     """
     Represents a iteration (usually 1-4 weeks) during which a specific set of
