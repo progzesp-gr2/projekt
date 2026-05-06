@@ -1,13 +1,29 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser
+
+
+
+# chlopaki widze, że kazdy user ma jakiś przypisaną rolę,
+# a w specyfikacji jest napisane ze korzystamy z wbudowanego Djany Usera
+# musiałem to dodać
+class User(AbstractUser):
+    class Role(models.TextChoices):
+        PROGRAMMER = 'PROGRAMMER', _('Programmer')
+        SCRUM_MASTER = 'SCRUM_MASTER', _('Scrum Master')
+        PRODUCT_OWNER = 'PRODUCT_OWNER', _('Product Owner')
+
+    role = models.CharField(
+        max_length=20,
+        choices=Role.choices,
+        default=Role.PROGRAMMER,
+    )
+
+
 
 
 class Project(models.Model):
-    """
-    Represents a main workspace or product being developed.
-    A project contains multiple sprints and tasks.
-    """
     name = models.CharField(
         max_length=255,
         help_text="The name of the project"
@@ -26,7 +42,21 @@ class Project(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         related_name='owned_projects',
-        help_text="The user who created or manages the project"
+        help_text="Product Owner projektu"
+    )
+    scrum_master = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='scrum_master_projects',
+        help_text="Scrum Master projektu"
+    )
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='projects',
+        blank=True,
+        help_text="Programiści w projekcie"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -38,6 +68,8 @@ class Project(models.Model):
 
     def __str__(self):
         return f"{self.key} - {self.name}"
+    
+
 
 
 class Sprint(models.Model):

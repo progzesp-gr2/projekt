@@ -10,7 +10,7 @@ export default function ProgrammerPage() {
     scrumMaster: 'Anna Nowak',
     members: ['Jan Kowalski', 'Anna Nowak', 'Piotr Zielinski'],
   };
-
+ 
   const tasks = [
     { id: 1, title: 'Stworzyć ekran logowania', status: 'W trakcie' },
     { id: 2, title: 'Dodać walidację formularza', status: 'Do zrobienia' },
