@@ -61,8 +61,8 @@ python3 manage.py test scrum.tests.test_auth.ApiAuthTestCase
 # Jeden test
 python3 manage.py test scrum.tests.test_auth.ApiAuthTestCase.test_me
 ```
-<small>Możliwe też jest zawężanie do modułu i pakietu, ale w tym
-projekcie jest tylko po jednym.</small>
+(*Możliwe też jest zawężanie do modułu i pakietu, ale w tym
+projekcie jest tylko po jednym.*)
 
 Wybrane opcje:
 
@@ -125,7 +125,7 @@ Ran 35 tests in 3.031s
 FAILED (failures=2)
 Destroying test database for alias 'default'...
 ```
-<small>Ścieżki w powyższym przykładzie są przycięte</small>
+(*Ścieżki w powyższym przykładzie są przycięte*)
 
 #### Więcej szczegółów
 
