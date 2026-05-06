@@ -80,7 +80,8 @@ Wybrane opcje:
 
 #### Komunikaty
 
-Testerka wypisuje informacje o przygotowaniach, przebiegu testów i podsumowanie.
+Testerka wypisuje informacje o przygotowaniach,
+przebiegu testów oraz podsumowanie.
 
 Komunikaty z przebiegu testów zwykle wyglądają w ten sposób:
 ```
@@ -95,7 +96,8 @@ OK
 Destroying test database for alias 'default'...
 ```
 
-W przypadku, gdy część testów nie zostanie zaliczona, przebieg testów wskaże niepowodzenia i zostanie wypisana lokalizacja ich wystąpienia:
+W przypadku, gdy część testów nie zostanie zaliczona, przebieg testów
+wskaże niepowodzenia i zostanie wypisana lokalizacja ich wystąpienia:
 ```
 Found 35 test(s).
 Creating test database for alias 'default'...
