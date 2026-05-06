@@ -68,6 +68,36 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'project', 'created_at', 'updated_at')
 
+    def validate(self, attrs):
+        project: Project | None = self.context.get('project')
+        user: User | None = attrs.get('user')
+        role = attrs.get('role') or getattr(self.instance, 'role', None)
+
+        if project is not None and user is not None:
+            if project.owner_id == user.id:
+                raise serializers.ValidationError({'user': 'Project owner is already part of project.'})
+
+            queryset = ProjectMembership.objects.filter(project=project, user=user)
+            if self.instance is not None:
+                queryset = queryset.exclude(pk=self.instance.pk)
+            if queryset.exists():
+                raise serializers.ValidationError({'user': 'User is already a member of this project.'})
+
+        if role == ProjectMembership.ProjectRole.PRODUCT_OWNER:
+            raise serializers.ValidationError({'role': 'Product owner role is reserved for project owner.'})
+
+        if project is not None and role == ProjectMembership.ProjectRole.SCRUM_MASTER:
+            scrum_master_qs = ProjectMembership.objects.filter(
+                project=project,
+                role=ProjectMembership.ProjectRole.SCRUM_MASTER,
+            )
+            if self.instance is not None:
+                scrum_master_qs = scrum_master_qs.exclude(pk=self.instance.pk)
+            if scrum_master_qs.exists():
+                raise serializers.ValidationError({'role': 'Project already has a Scrum Master.'})
+
+        return attrs
+
 
 class SprintSerializer(serializers.ModelSerializer):
     class Meta:
