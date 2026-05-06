@@ -12,6 +12,11 @@ class ProjectListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
 class SprintListCreateView(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
 
@@ -23,6 +28,11 @@ class SprintListCreateView(generics.ListCreateAPIView):
         if status := params.get('status'):
             qs = qs.filter(status=status)
         return qs
+
+
+class SprintDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Sprint.objects.all()
+    serializer_class = SprintSerializer
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
@@ -45,7 +55,6 @@ class TaskListCreateView(generics.ListCreateAPIView):
         serializer.save(reporter=self.request.user)
 
 
-class TaskUpdateView(generics.UpdateAPIView):
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    http_method_names = ['patch']
