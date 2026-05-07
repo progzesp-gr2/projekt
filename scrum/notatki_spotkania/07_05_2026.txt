@@ -1,0 +1,69 @@
+-----------------------------------------------------------
+🏎️. ݁₊ ⊹ . ݁˖ . Sprint 07.05 - 28.05 🏁............🏎💨.
+👀  14.05 - 10:05 spotkanie do rozwiązywania problemów 👀
+👀  21.05 - 10:05 spotkanie do rozwiązywania problemów - final 👀
+👀  27.05 - 19:00 generalne podsumowanie 👀
+👀  28.05 - 08:00 spotkanie z Misiaszkiem 👀
+
+
+
+Podział zadań:
+Kuba 🫠
+
+    stworzenie notatki ze spotkania,
+    dodanie backlogu dla product ownera
+    filtracja zadań do backlogu
+    rozdział zadań scrum master, product owner - zastanowić się 
+
+
+Nikodem 😎
+    interfejs do sprintów
+    obsługa statusu rejestracji
+
+
+Witek 🫡
+
+    testy do ról (20:00, 10.05) -> merge pull requesta Alexa
+    testy do frontendu
+    nowe testy do backendu
+
+
+Łukasz 😊
+    połączenie frontu z backendem:
+    
+
+    obsługa dodawania projektów (backend)
+        obsługa tworzenia zespołów (dodawanie ludzi) (backend)
+            obsługa zadań (scrum master i product owner) (backend)
+            obsługa backlogu
+            obserwacja statusu rejestracji
+            obsługa sprintów (backend)
+
+
+    dodać corsa do maina
+
+
+
+Jan 😁
+
+    analiza pull requestów na bieżąco
+    docker dla projektu
+    zastanowić się nad hostowaniem
+
+
+Przemek 🙂
+    zamknąć pull requesta 
+    pytanie ludzi o pull requesty
+    analiza pull requestów na bieżąco (rano, południe, wieczór)
+    naprawa bugów na bieżąco
+    ewentualne zadanie 1,3
+
+
+
+Aleks 🥳
+    wakacje pod palmami
+    ewentualne zadanie 2
+
+
+
+Dobrego dnia 💪
