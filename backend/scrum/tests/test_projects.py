@@ -3,7 +3,7 @@ from typing import Any
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model, get_user
-from ..models import Project
+from ..models import Project, ProjectMembership
 
 User = get_user_model()
 
@@ -13,6 +13,15 @@ class ApiProjectNoLoginTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
         response = self.client.post(path=reverse('project-list-create'))
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.get(path=reverse('project-detail', args=[1]))
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.patch(path=reverse('project-detail', args=[1]))
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.delete(path=reverse('project-detail', args=[1]))
         self.assertEqual(response.status_code, 403)
 
 
@@ -99,17 +108,20 @@ class ApiProjectCreateTestCase(TestCase):
 class ApiProjectListTestCase(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.userdata = {'username': 'jtp', 'password': 'pass', 'first_name': 'Jan', 'last_name': 'Tępy', 'email': 'jtp@example.com'}
-        cls.user = User.objects.create_user(**cls.userdata)
-        del cls.userdata['password']
+        cls.users = [
+            User.objects.create_user(username='jtp', password='pass', first_name='Jan', last_name='Tępy', email='jtp@example.com'),
+            User.objects.create_user(username='tp', password='pw', first_name='Tomasz', last_name='Problem', email='tp@example.com')
+        ]
 
         cls.projects = [
-            Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.user),
-            Project.objects.create(name='Bar', key='bar', description='zzzzz', owner=cls.user)
+            Project.objects.create(name='Foo', key='foo', description='Lorem ipsum dolor sit amet', owner=cls.users[0]),
+            Project.objects.create(name='Bar', key='bar', description='zzzzz', owner=cls.users[0])
         ]
+
+        ProjectMembership.objects.create(project=cls.projects[0], user=cls.users[1], role=ProjectMembership.ProjectRole.PROGRAMMER)
     
     def test_get_list(self):
-        self.client.force_login(self.user)
+        self.client.force_login(self.users[0])
 
         response = self.client.get(path=reverse('project-list-create'))
         
@@ -127,5 +139,24 @@ class ApiProjectListTestCase(TestCase):
                 case 'bar':
                     self.assertEqual(proj['name'], 'Bar')
                     self.assertEqual(proj['description'], 'zzzzz')
+                case _:
+                    self.fail()
+    
+    def test_get_list_user1(self):
+        self.client.force_login(self.users[1])
+
+        response = self.client.get(path=reverse('project-list-create'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['content-type'], 'application/json')
+        rd = response.json()
+
+        self.assertIsInstance(rd, list)
+
+        for proj in rd:
+            match proj['key']:
+                case 'foo':
+                    self.assertEqual(proj['name'], 'Foo')
+                    self.assertEqual(proj['description'], 'Lorem ipsum dolor sit amet')
                 case _:
                     self.fail()
