@@ -67,6 +67,13 @@ class ApiProjectGetTestCase(TestCase):
         response = self.client.get(path=reverse('project-detail', args=[self.projects[1].pk]))
 
         self.assertEqual(response.status_code, 404)
+    
+    def test_get_missting(self):
+        self.client.force_login(self.users[0])
+
+        response = self.client.get(path=reverse('project-detail', args=[999]))
+
+        self.assertEqual(response.status_code, 404)
 
 class ApiProjectUpdateTestCase(TestCase):
     @classmethod
