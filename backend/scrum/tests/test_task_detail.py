@@ -104,6 +104,13 @@ class ApiTaskGetTestCase(TestCase):
         response = self.client.get(path=reverse('task-detail', args=[self.tasks[0].pk]))
 
         self.assertEqual(response.status_code, 404)
+    
+    def test_get_missting(self):
+        self.client.force_login(self.users[0])
+
+        response = self.client.get(path=reverse('project-detail', args=[999]))
+
+        self.assertEqual(response.status_code, 404)
 
 class ApiTaskUpdateTestCase(TestCase):
     @classmethod
