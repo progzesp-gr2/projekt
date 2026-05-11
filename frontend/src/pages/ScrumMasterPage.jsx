@@ -19,6 +19,14 @@ export default function ScrumMasterPage() {
 
   const [editingTaskId, setEditingTaskId] = useState(null);
 
+  // też roboczo
+  const [sprints, setSprints] = useState([
+    { id: 1, name: 'Sprint 1', status: 'Aktywny' }
+  ]);
+  const [isAddSprintModalOpen, setIsAddSprintModalOpen] = useState(false);
+  const [newSprintName, setNewSprintName] = useState('');
+  const [newSprintStatus, setNewSprintStatus] = useState('Planowany');
+
   const handleAddTask = (e) => {
     e.preventDefault();
 
@@ -37,6 +45,25 @@ export default function ScrumMasterPage() {
     ]);
 
     setNewTask('');
+  };
+
+  const handleAddSprint = (e) => {
+    e.preventDefault();
+
+    if (!newSprintName.trim()) return;
+
+    setSprints([
+      ...sprints,
+      {
+        id: Date.now(),
+        name: newSprintName.trim(),
+        status: newSprintStatus
+      }
+    ]);
+
+    setNewSprintName('');
+    setNewSprintStatus('Planowany');
+    setIsAddSprintModalOpen(false);
   };
 
   const handleDeleteTask = (taskId) => {
@@ -114,25 +141,41 @@ export default function ScrumMasterPage() {
           </h2>
           <p className="text-sm opacity-60">Zarządzanie sprintami i zadaniami</p>
         </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsAddSprintModalOpen(true)}
+            className="px-4 py-2 rounded-md font-bold text-sm text-white cursor-pointer hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: 'var(--accent)' }}
+          >
+            Dodaj sprint
+          </button>
 
-        <button
-          onClick={() => navigate('/login')}
-          className="px-4 py-2 rounded-md border text-sm font-medium cursor-pointer"
-          style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
-        >
-          Wyloguj
-        </button>
+          <button
+            onClick={() => navigate('/login')}
+            className="px-4 py-2 rounded-md border text-sm font-medium cursor-pointer"
+            style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
+          >
+            Wyloguj
+          </button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div
-          className="p-6 rounded-xl border"
-          style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)' }}
-        >
-          <h3 className="font-bold mb-4">Sprint</h3>
-          <p className="text-sm opacity-70 mb-2">Aktualny sprint:</p>
-          <h2 className="text-xl font-bold">Sprint 1</h2>
-          <p className="text-sm opacity-60 mt-2">Status: aktywny</p>
+        <div className="space-y-4">
+          <h3 className="font-bold mb-2">Sprinty</h3>
+          {sprints.map((sprint) => (
+            <div
+              key={sprint.id}
+              className="p-6 rounded-xl border relative"
+              style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)' }}
+            >
+              <h2 className="text-xl font-bold mb-1">{sprint.name}</h2>
+              <p className="text-sm opacity-60">Status: <span className="font-medium">{sprint.status}</span></p>
+            </div>
+          ))}
+          {sprints.length === 0 && (
+            <p className="text-sm opacity-50 italic">Brak utworzonych sprintów.</p>
+          )}
         </div>
 
         <div
@@ -356,6 +399,82 @@ export default function ScrumMasterPage() {
                 Gotowe
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Dodawanie sprintu */}
+      {isAddSprintModalOpen && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div 
+            className="w-full max-w-sm p-6 rounded-xl border shadow-2xl"
+            style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)' }}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-bold text-lg m-0" style={{ color: 'var(--text-h)' }}>
+                Dodaj nowy sprint
+              </h3>
+              <button
+                onClick={() => setIsAddSprintModalOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors cursor-pointer opacity-50 hover:opacity-100 text-2xl"
+                style={{ color: 'var(--text-h)' }}
+              >
+                &times;
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddSprint}>
+              <div className="mb-5">
+                <h4 className="font-bold text-sm mb-2 opacity-70">Nazwa sprintu:</h4>
+                <input
+                  type="text"
+                  value={newSprintName}
+                  onChange={(e) => setNewSprintName(e.target.value)}
+                  placeholder="Nazwa sprintu"
+                  className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                  style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
+                  autoFocus
+                />
+              </div>
+
+              <div className="mb-8">
+                <h4 className="font-bold text-sm mb-2 opacity-70">Początkowy status:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'Planowany', activeClass: 'bg-gray-100 text-gray-700 border-gray-400', dotColor: 'text-gray-500' },
+                    { label: 'Aktywny', activeClass: 'bg-blue-100 text-blue-700 border-blue-400', dotColor: 'text-blue-500' },
+                    { label: 'Zakończony', activeClass: 'bg-green-100 text-green-700 border-green-400', dotColor: 'text-green-500' }
+                  ].map((statusObj) => {
+                    const isActive = newSprintStatus === statusObj.label;
+
+                    return (
+                      <button
+                        type="button"
+                        key={statusObj.label}
+                        onClick={() => setNewSprintStatus(statusObj.label)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center ${
+                          isActive 
+                            ? statusObj.activeClass 
+                            : 'bg-gray-50 text-gray-400 border-transparent hover:bg-gray-100 hover:text-gray-600'
+                        }`}
+                      >
+                        <span className={`mr-1.5 text-[10px] ${isActive ? statusObj.dotColor : 'text-gray-400'}`}>●</span>
+                        {statusObj.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="px-6 py-2 rounded-lg font-bold text-white cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: 'var(--accent)' }}
+                >
+                  Utwórz sprint
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
