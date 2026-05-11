@@ -28,6 +28,7 @@ export default function ScrumMasterPage() {
   const [isAddSprintModalOpen, setIsAddSprintModalOpen] = useState(false);
   const [newSprintName, setNewSprintName] = useState('');
   const [newSprintStatus, setNewSprintStatus] = useState('Planowany');
+  const [editingSprintId, setEditingSprintId] = useState(null);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -72,6 +73,24 @@ export default function ScrumMasterPage() {
   const handleDeleteTask = (taskId) => {
     if (!window.confirm("Czy na pewno chcesz usunąć to zadanie?")) return;
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  };
+
+  const handleDeleteSprint = (e, sprintId) => {
+    e.stopPropagation();
+    
+    if (!window.confirm("Czy na pewno chcesz usunąć ten sprint?")) return;
+    
+    setSprints((prevSprints) => prevSprints.filter((s) => s.id !== sprintId));
+    setTasks((prevTasks) => prevTasks.filter((t) => t.sprintId !== sprintId));
+    if (selectedSprintId === sprintId) {
+      setSelectedSprintId(null);
+    }
+  };
+
+  const handleChangeSprintStatus = (sprintId, newStatus) => {
+    setSprints((prevSprints) =>
+      prevSprints.map((sprint) => (sprint.id === sprintId ? { ...sprint, status: newStatus } : sprint))
+    );
   };
 
   const handleToggleAssignee = (taskId, memberName) => {
@@ -181,6 +200,23 @@ export default function ScrumMasterPage() {
               >
                 <h2 className="text-xl font-bold mb-1">{sprint.name}</h2>
                 <p className="text-sm opacity-60">Status: <span className="font-medium">{sprint.status}</span></p>
+                <div className="absolute top-4 right-4 flex gap-1">
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setEditingSprintId(sprint.id); }}
+                    className="px-2 py-1 rounded-md text-xs border border-transparent hover:bg-gray-100 transition-colors"
+                    style={{ color: 'var(--text-h)' }}
+                  >
+                    Edytuj
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteSprint(e, sprint.id)}
+                    className="px-2 py-1 rounded-md text-xs text-red-500 border border-transparent hover:bg-red-100 hover:border-red-300 hover:text-red-700 transition-colors cursor-pointer"
+                  >
+                    Usuń
+                  </button>
+                </div>
               </div>
             );
             })}
@@ -458,7 +494,7 @@ export default function ScrumMasterPage() {
               </div>
 
               <div className="mb-8">
-                <h4 className="font-bold text-sm mb-2 opacity-70">Początkowy status:</h4>
+                <h4 className="font-bold text-sm mb-2 opacity-70">Status:</h4>
                 <div className="flex flex-wrap gap-2">
                   {[
                     { label: 'Planowany', activeClass: 'bg-gray-100 text-gray-700 border-gray-400', dotColor: 'text-gray-500' },
@@ -496,6 +532,68 @@ export default function ScrumMasterPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edycja sprintu */}
+      {editingSprintId && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div 
+            className="w-full max-w-sm p-6 rounded-xl border shadow-2xl"
+            style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)' }}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-bold text-lg m-0" style={{ color: 'var(--text-h)' }}>
+                Edytuj sprint
+              </h3>
+              <button
+                onClick={() => setEditingSprintId(null)}
+                className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors cursor-pointer opacity-50 hover:opacity-100 text-2xl"
+                style={{ color: 'var(--text-h)' }}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="mb-8">
+              <h4 className="font-bold text-sm mb-2 opacity-70">Status:</h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Planowany', activeClass: 'bg-gray-100 text-gray-700 border-gray-400', dotColor: 'text-gray-500' },
+                  { label: 'Aktywny', activeClass: 'bg-blue-100 text-blue-700 border-blue-400', dotColor: 'text-blue-500' },
+                  { label: 'Zakończony', activeClass: 'bg-green-100 text-green-700 border-green-400', dotColor: 'text-green-500' }
+                ].map((statusObj) => {
+                  const currentStatus = sprints.find((s) => s.id === editingSprintId)?.status;
+                  const isActive = currentStatus === statusObj.label;
+
+                  return (
+                    <button
+                      type="button"
+                      key={statusObj.label}
+                      onClick={() => handleChangeSprintStatus(editingSprintId, statusObj.label)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center ${
+                        isActive 
+                          ? statusObj.activeClass 
+                          : 'bg-gray-50 text-gray-400 border-transparent hover:bg-gray-100 hover:text-gray-600'
+                      }`}
+                    >
+                      <span className={`mr-1.5 text-[10px] ${isActive ? statusObj.dotColor : 'text-gray-400'}`}>●</span>
+                      {statusObj.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setEditingSprintId(null)}
+                className="px-6 py-2 rounded-lg font-bold text-white cursor-pointer hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                Gotowe
+              </button>
+            </div>
           </div>
         </div>
       )}
