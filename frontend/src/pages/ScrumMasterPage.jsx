@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 export default function ScrumMasterPage() {
   const navigate = useNavigate();
 
+  const [selectedSprintId, setSelectedSprintId] = useState(1);
+
   const [tasks, setTasks] = useState([
-    { id: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie', priority: 'Neutralny', type: 'Feature'},
+    { id: 1, sprintId: 1, title: 'Stworzyć ekran logowania', assignedTo: ['Jan Kowalski'], status: 'W trakcie', priority: 'Neutralny', type: 'Feature'},
   ]);
 
   const [newTask, setNewTask] = useState('');
@@ -30,12 +32,13 @@ export default function ScrumMasterPage() {
   const handleAddTask = (e) => {
     e.preventDefault();
 
-    if (!newTask.trim()) return;
+    if (!newTask.trim() || !selectedSprintId) return;
 
     setTasks([
       ...tasks,
       {
         id: Date.now(),
+        sprintId: selectedSprintId,
         title: newTask,
         assignedTo: [],
         status: 'Do zrobienia',
@@ -163,19 +166,27 @@ export default function ScrumMasterPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4">
           <h3 className="font-bold mb-2">Sprinty</h3>
-          {sprints.map((sprint) => (
-            <div
-              key={sprint.id}
-              className="p-6 rounded-xl border relative"
-              style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)' }}
-            >
-              <h2 className="text-xl font-bold mb-1">{sprint.name}</h2>
-              <p className="text-sm opacity-60">Status: <span className="font-medium">{sprint.status}</span></p>
-            </div>
-          ))}
-          {sprints.length === 0 && (
-            <p className="text-sm opacity-50 italic">Brak utworzonych sprintów.</p>
-          )}
+          {sprints.map((sprint) => {
+            const isSelected = selectedSprintId === sprint.id;
+            return (
+              <div
+                key={sprint.id}
+                onClick={() => setSelectedSprintId(sprint.id)}
+                className={`p-6 rounded-xl border relative cursor-pointer transition-all ${
+                  isSelected 
+                    ? 'ring-2 ring-purple-500 shadow-md' 
+                    : 'hover:bg-gray-50/50'
+                }`}
+                style={{ backgroundColor: 'var(--bg)', borderColor: isSelected ? 'var(--accent)' : 'var(--border)' }}
+              >
+                <h2 className="text-xl font-bold mb-1">{sprint.name}</h2>
+                <p className="text-sm opacity-60">Status: <span className="font-medium">{sprint.status}</span></p>
+              </div>
+            );
+            })}
+            {sprints.length === 0 && (
+              <p className="text-sm opacity-50 italic">Brak utworzonych sprintów.</p>
+            )}
         </div>
 
         <div
@@ -203,8 +214,11 @@ export default function ScrumMasterPage() {
           </form>
 
           <div className="space-y-3">
-            {tasks.map((task) => (
-              <div
+            <div className="space-y-3">
+            {tasks
+              .filter((task) => task.sprintId === selectedSprintId)
+              .map((task) => (
+                <div
                 key={task.id}
                 className="p-4 rounded-lg border flex justify-between items-start"
                 style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
@@ -248,7 +262,14 @@ export default function ScrumMasterPage() {
                   </button>
                 </div>
               </div>
-            ))}
+              ))}
+
+            {tasks.filter((t) => t.sprintId === selectedSprintId).length === 0 && (
+              <div className="text-center py-10 opacity-40 text-sm">
+                Brak zadań w tym sprincie.
+              </div>
+            )}
+            </div>
           </div>
         </div>
       </div>
