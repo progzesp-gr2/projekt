@@ -44,7 +44,7 @@ export default function ScrumMasterPage() {
         assignedTo: [],
         status: 'Do zrobienia',
         priority: 'Neutralny',
-        type: 'feature'
+        type: 'Feature'
       },
     ]);
 
@@ -204,7 +204,7 @@ export default function ScrumMasterPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setEditingSprintId(sprint.id); }}
-                    className="px-2 py-1 rounded-md text-xs border border-transparent hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                    className="px-2 py-1 rounded-md text-xs border border-transparent hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer"
                     style={{ borderColor: 'var(--border)' }}
                   >
                     Edytuj
