@@ -204,8 +204,8 @@ export default function ScrumMasterPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setEditingSprintId(sprint.id); }}
-                    className="px-2 py-1 rounded-md text-xs border border-transparent hover:bg-gray-100 transition-colors"
-                    style={{ color: 'var(--text-h)' }}
+                    className="px-2 py-1 rounded-md text-xs border border-transparent hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                    style={{ borderColor: 'var(--border)' }}
                   >
                     Edytuj
                   </button>
@@ -284,8 +284,8 @@ export default function ScrumMasterPage() {
                   <button
                     type="button"
                     onClick={() => setEditingTaskId(task.id)}
-                    className="px-3 py-1.5 rounded-md text-sm font-medium border hover:bg-gray-100 transition-colors cursor-pointer"
-                    style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
+                    className="px-3 py-1.5 rounded-md text-sm font-medium border hover:bg-gray-100 transition-colors cursor-pointer hover:text-gray-900"
+                    style={{ borderColor: 'var(--border)' }}
                   >
                     Edytuj
                   </button>
