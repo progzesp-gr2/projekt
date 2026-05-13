@@ -1,3 +1,8 @@
+/**
+ * To jest plikm który dostarcza backlog
+ * Należy dodać endpoint do zmiany priorytetu zadania (opisałem to poniżej :) )
+ */
+
 import { useState } from 'react';
 
 export default function BacklogTab() {
@@ -35,7 +40,7 @@ export default function BacklogTab() {
             : task
         )
     );
-    };
+  };
 
   
 
