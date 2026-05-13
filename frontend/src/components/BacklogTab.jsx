@@ -1,5 +1,5 @@
 /**
- * To jest plikm który dostarcza backlog
+ * To jest plik, który dostarcza backlog
  * Należy dodać endpoint do zmiany priorytetu zadania (opisałem to poniżej :) )
  */
 
