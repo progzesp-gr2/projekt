@@ -8,7 +8,9 @@
 
 1. npm run build
 2. npm run dev
-3. wejście na:  <http://localhost:5173/>
+1. npm install
+2. npm run dev
+3. wejście na <http://localhost:5173/>
 
 
 
