@@ -26,7 +26,7 @@ function App() {
         <Route path="/programmer" element={<Programmer />} />
         <Route path="/scrum-master" element={<ScrumMaster />} />
         <Route path="/product-owner" element={<ProductOwner />} /> //tu wybieramy projekt jaki chcemy przeglądać
-        <Route path="/product-owner/project/:id" element={<ProjectDashboard />}/> //tu już jest wybrany proejkt i ładujemy konkretny layout
+        <Route path="/product-owner/project/:id" element={<ProjectDashboard />}/> //tu już jest wybrany projekt i ładujemy konkretny layout
       </Routes>
     </Router>
   );
