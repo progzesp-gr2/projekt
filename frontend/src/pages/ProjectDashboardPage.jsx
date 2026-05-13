@@ -127,8 +127,7 @@ export default function ProjectDashboardPage() {
                 color: activeTab === tab ? 'var(--text-h)' : 'inherit'
               }}
             >
-              {tab === 'backlog' && 'Backlog'}
-              {tab === 'users' && 'Użytkownicy'}
+              {tab === 'backlog' ? 'Backlog' : 'Użytkownicy'}
               
               
             </button>
