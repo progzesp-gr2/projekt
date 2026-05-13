@@ -1,6 +1,6 @@
 /**
  * Tutaj product owner przegląda co dzieje się w danym projekcie:
- * - Tworzy zadania i nadaje inm priorytet
+ * - Tworzy zadania i nadaje im priorytet
  * - sprawdza backlog projektu
  * - tutaj są statystyki projektu
  * - można patrzyć kto jest w projekcie 
