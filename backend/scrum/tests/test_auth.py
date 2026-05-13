@@ -20,14 +20,42 @@ class ApiRegisterTestCase(TestCase):
         user = User.objects.get(pk=1)
         self.assertEqual(response['content-type'], 'application/json')
         rd = response.json()
+        # Verifies the new registration success payload sent to the frontend.
+        self.assertEqual(rd['message'], 'User created successfully.')
+        self.assertFalse(rd['user_exists'])
+        self.assertTrue(rd['user_created'])
         for key, value in data.items():
             self.assertEqual(rd[key], value)
             self.assertEqual(user.__dict__[key], value)
+
+    def test_create_existing_username(self):
+        # Added coverage for duplicate registration: the API reports that the
+        # user already exists and does not create another database row.
+        User.objects.create_user(username='jtp', password='pass')
+
+        response = self.client.post(
+            path=reverse('auth-register'),
+            data={'username': 'jtp', 'password': 'test'}
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response['content-type'], 'application/json')
+        rd = response.json()
+        self.assertEqual(rd['message'], 'User with this username already exists.')
+        self.assertTrue(rd['user_exists'])
+        self.assertFalse(rd['user_created'])
+        self.assertEqual(User.objects.filter(username='jtp').count(), 1)
 
     def test_missing(self):
         response = self.client.post(path=reverse('auth-register'))
 
         self.assertEqual(response.status_code, 400)
+        rd = response.json()
+        # Verifies the new registration failure payload for missing fields.
+        self.assertEqual(rd['message'], 'User could not be created.')
+        self.assertFalse(rd['user_exists'])
+        self.assertFalse(rd['user_created'])
+        self.assertIn('errors', rd)
         self.assertEqual(User.objects.count(), 0)
 
 
@@ -46,6 +74,10 @@ class ApiAuthTestCase(TestCase):
         user = get_user(self.client)
 
         self.assertTrue(user.is_authenticated)
+        rd = response.json()
+        # Verifies the new login success payload sent to the frontend.
+        self.assertEqual(rd['message'], 'Login successful.')
+        self.assertTrue(rd['login_success'])
         for key, value in self.userdata.items():
             self.assertEqual(user.__dict__[key], value)
         
@@ -79,15 +111,32 @@ class ApiAuthTestCase(TestCase):
     def test_login_missing(self):
         response = self.client.post(path=reverse('auth-login'))
         self.assertEqual(response.status_code, 400)
+        rd = response.json()
+        # Verifies the new login failure payload for missing credentials.
+        self.assertEqual(rd['message'], 'Invalid username or password.')
+        self.assertFalse(rd['login_success'])
+        self.assertIn('errors', rd)
         response = self.client.post(path=reverse('auth-login'), data={'username': 'jtp'})
         self.assertEqual(response.status_code, 400)
+        rd = response.json()
+        self.assertEqual(rd['message'], 'Invalid username or password.')
+        self.assertFalse(rd['login_success'])
+        self.assertIn('errors', rd)
     
     def test_bad_user(self):
         response = self.client.post(path=reverse('auth-login'), data={'username': 'nope', 'password': 'pass'})
 
         self.assertEqual(response.status_code, 400)
+        rd = response.json()
+        # Verifies the new login failure payload for an unknown username.
+        self.assertEqual(rd['message'], 'Invalid username or password.')
+        self.assertFalse(rd['login_success'])
 
     def test_bad_password(self):
         response = self.client.post(path=reverse('auth-login'), data={'username': 'jtp', 'password': 'nope'})
 
         self.assertIn(response.status_code, (400, 401))
+        rd = response.json()
+        # Verifies the new login failure payload for an incorrect password.
+        self.assertEqual(rd['message'], 'Invalid username or password.')
+        self.assertFalse(rd['login_success'])
