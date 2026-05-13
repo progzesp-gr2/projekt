@@ -8,25 +8,29 @@ import { useState } from 'react';
 export default function BacklogTab({projectId}) {
 
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskAssignedTo, setNewTaskAssignedTo] = useState('');
+  const [newTaskPriority, setNewTaskPriority] = useState('ustaw priorytet');
+  const [showTaskForm, setShowTaskForm] = useState(false);
 
   const [tasks, setTasks] = useState([
     {
         id: 1,
         title: 'Login page',
         assignedTo: 'Jan Kowalski',
-        priority: 'to_set',
+        priority: 'ustaw priorytet',
     },
     {
         id: 2,
         title: 'Dashboard UI',
         assignedTo: 'Anna Nowak',
-        priority: 'high',
+        priority: 'poważny',
     },
     {
         id: 3,
         title: 'Fix navbar',
         assignedTo: 'Piotr Zielinski',
-        priority: 'medium',
+        priority: 'średni',
     },
   ]);
 
@@ -42,24 +46,48 @@ export default function BacklogTab({projectId}) {
     );
   };
 
+  const handleCreateTask = (e) => {
+
+    e.preventDefault();
+
+    if (newTaskTitle.trim() === '') return;
+
+    const newTask = {
+        id: Date.now(),
+        title: newTaskTitle,
+        assignedTo: newTaskAssignedTo || 'Nie przypisano',
+        priority: newTaskPriority,
+    };
+
+    setTasks((prev) => [...prev, newTask]);
+
+    // reset formularza
+    setNewTaskTitle('');
+    setNewTaskAssignedTo('');
+    setNewTaskPriority('ustaw priorytet');
+
+    // zamknięcie formularza
+    setShowTaskForm(false);
+    };
+
   
 
   const getPriorityStyle = (priority) => {
     switch (priority.toLowerCase()) {
 
-        case 'to_set':
+        case 'ustaw priorytet':
         return 'bg-gray-100 text-gray-700 border-gray-200';
 
-        case 'critical':
+        case 'krytyczny':
         return 'bg-red-100 text-red-700 border-red-200';
 
-        case 'high':
+        case 'poważny':
         return 'bg-orange-100 text-orange-700 border-orange-200';
 
-        case 'medium':
+        case 'średni':
         return 'bg-yellow-100 text-yellow-700 border-yellow-200';
 
-        case 'normal':
+        case 'neutralny':
         return 'bg-green-100 text-green-700 border-green-200';
 
         default:
@@ -75,16 +103,108 @@ export default function BacklogTab({projectId}) {
           className="text-2xl font-bold"
           style={{ color: 'var(--text-h)' }}
         >
-          Product Backlog
+          Backlog
         </h2>
 
         <button
-          className="px-4 py-2 rounded-lg text-white font-bold cursor-pointer"
-          style={{ backgroundColor: 'var(--accent)' }}
-        >
-          + Add Task
+            onClick={() =>
+                setShowTaskForm((prev) => !prev)
+            }
+            className="px-4 py-2 rounded-lg text-white font-bold cursor-pointer"
+            style={{ backgroundColor: 'var(--accent)' }}
+            >
+            {showTaskForm
+                ? 'Zamknij'
+                : '+ Dodaj zadanie'}
         </button>
       </div>
+
+      {showTaskForm && (
+        <form
+            onSubmit={handleCreateTask}
+            className="p-5 rounded-xl border mb-6"
+            style={{
+            backgroundColor: 'var(--code-bg)',
+            borderColor: 'var(--border)',
+            }}
+        >
+
+            <h3 className="font-bold mb-4">
+            Dodaj nowe zadanie
+            </h3>
+
+            <input
+            type="text"
+            value={newTaskTitle}
+            onChange={(e) =>
+                setNewTaskTitle(e.target.value)
+            }
+            placeholder="Nazwa zadania"
+            className="w-full px-4 py-2 mb-3 rounded border"
+            style={{
+                backgroundColor: 'var(--bg)',
+                borderColor: 'var(--border)',
+            }}
+            />
+
+            <input
+            type="text"
+            value={newTaskAssignedTo}
+            onChange={(e) =>
+                setNewTaskAssignedTo(e.target.value)
+            }
+            placeholder="Osoba odpowiedzialna"
+            className="w-full px-4 py-2 mb-3 rounded border"
+            style={{
+                backgroundColor: 'var(--bg)',
+                borderColor: 'var(--border)',
+            }}
+            />
+
+            <select
+            value={newTaskPriority}
+            onChange={(e) =>
+                setNewTaskPriority(e.target.value)
+            }
+            className="w-full px-4 py-2 mb-4 rounded border"
+            style={{
+                backgroundColor: 'var(--bg)',
+                borderColor: 'var(--border)',
+            }}
+            >
+            <option value="ustaw priorytet">
+                Ustaw priorytet
+            </option>
+
+            <option value="krytyczny">
+                Krytyczny
+            </option>
+
+            <option value="poważny">
+                Poważny
+            </option>
+
+            <option value="średni">
+                Średni
+            </option>
+
+            <option value="neutralny">
+                Neutralny
+            </option>
+            </select>
+
+            <button
+            type="submit"
+            className="w-full py-2 rounded-lg font-bold text-white cursor-pointer"
+            style={{
+                backgroundColor: 'var(--accent)',
+            }}
+            >
+            Dodaj zadanie
+            </button>
+
+        </form>
+        )}
 
         <div className="space-y-4">
 
@@ -123,11 +243,11 @@ export default function BacklogTab({projectId}) {
                         borderColor: 'var(--border)',
                         }}
                     >
-                        <option value="to_set">To Set</option>
-                        <option value="critical">Critical</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="normal">Normal</option>
+                        <option value="ustaw priorytet">Ustaw priorytet</option>
+                        <option value="krytyczny">Krytyczny</option>
+                        <option value="poważny">Poważny</option>
+                        <option value="średni">Średni</option>
+                        <option value="neutralny">Neutralny</option>
                     </select>
                     ) : (
                     <span
