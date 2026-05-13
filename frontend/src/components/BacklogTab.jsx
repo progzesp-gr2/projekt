@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 
-export default function BacklogTab() {
+export default function BacklogTab({projectId}) {
 
   const [editingTaskId, setEditingTaskId] = useState(null);
 
