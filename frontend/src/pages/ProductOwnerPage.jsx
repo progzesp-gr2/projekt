@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BacklogTab from '../components/BacklogTab';
 
 
 
 export default function ProductOwnerPage() {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('backlog');
 
   const stats = [
     { label: 'Liczba użytkowników', value: '1', color: '#aa3bff' },
@@ -159,7 +160,7 @@ export default function ProductOwnerPage() {
           className="flex gap-2 p-1 rounded-lg border"
           style={{ backgroundColor: 'var(--code-bg)', borderColor: 'var(--border)' }}
         >
-          {['users', 'projects', 'settings'].map((tab) => (
+          {['backlog', 'users', 'projects'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -171,9 +172,10 @@ export default function ProductOwnerPage() {
                 color: activeTab === tab ? 'var(--text-h)' : 'inherit'
               }}
             >
+              {tab === 'backlog' && 'Backlog'}
               {tab === 'users' && 'Użytkownicy'}
               {tab === 'projects' && 'Projekty'}
-              {tab === 'settings' && 'Ustawienia'}
+              
             </button>
           ))}
         </div>
@@ -406,9 +408,11 @@ export default function ProductOwnerPage() {
                 </div>
               </div>
             </div>
+          ) : activeTab === 'backlog' ? (
+            <BacklogTab />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
-              <h2 className="mb-2">Wkrótce</h2>
+            <h2 className="mb-2">Wkrótce</h2>
             </div>
           )}
 

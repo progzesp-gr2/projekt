@@ -18,13 +18,13 @@ export default function RegisterPage() {
     };
 
     console.log('REGISTER:', userData);
-
-    // 🔥 temporary logic (replace with API later)
-    if (role === 'scrum_master' || role === 'product_owner') {
-      navigate('/admin');
-    } else {
-      // W przyszłości do rozwinięcia
-      navigate('/user');
+    //rozrzucamy do konkretnych widoków
+    if (role === 'scrum_master'){
+      navigate('/scrum-master');
+    } else if (role === 'product_owner') {
+      navigate('/product-owner');
+    } else{
+      navigate('/programmer');
     }
   };
 
