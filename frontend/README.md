@@ -4,7 +4,7 @@
 - Zainstalować nvm: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash`
 - przeładować bashrc (bo system czyta bashrc tylko raz na początku uruchamiania): `source ~/.bashrc`
 
-# Uruchamianie
+# Uruchamianie Frontedu
 
 1. npm run build
 2. npm run dev
