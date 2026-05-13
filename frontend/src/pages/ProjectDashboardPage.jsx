@@ -27,8 +27,36 @@ export default function ProjectDashboardPage() {
     { label: 'Ukończone', value: '0', percentage: '0%', color: '#10b981' },
   ];
 
-  const [users] = useState([]) //coś tu trzeba dać
-
+  const [users] = useState([
+    {
+      id: 'P1',
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      role: 'programista',
+      tasks: 5,
+    },
+    {
+      id: 'P2',
+      name: 'Anna Nowak',
+      email: 'anna@example.com',
+      role: 'programista',
+      tasks: 3,
+    },
+    {
+    id: 'SM1',
+    name: 'Michał Scrum',
+    email: 'scrum@example.com',
+    role: 'scrum master',
+    tasks: 1,
+  },
+  {
+    id: 'PO1',
+    name: 'Katarzyna Product',
+    email: 'po@example.com',
+    role: 'product owner',
+    tasks: 2,
+  },
+  ]);
 
   
 
