@@ -1,6 +1,6 @@
 /**
  * To jest plik do routowania.
- * Bardzo ważne jest to że kiedy będzie tworzony endpoit
+ * Bardzo ważne jest to że kiedy będzie tworzony endpoint
  * do przeglądania projektów przed product ownera to ważne żeby wyglądał on tak:
  * "/product-owner/project/:id"
  */
