@@ -21,13 +21,13 @@ export default function ProjectDashboardPage() {
   const [activeTab, setActiveTab] = useState('backlog');
 
   const stats = [
-    { label: 'Liczba użytkowników', value: '1', color: '#aa3bff' },
+    { label: 'Liczba członków', value: '1', color: '#aa3bff' },
     { label: 'Projekty', value: '3', color: '#3b82f6' },
     { label: 'Wszystkie zadania', value: '1', color: '#10b981' },
     { label: 'Ukończone', value: '0', percentage: '0%', color: '#10b981' },
   ];
 
-  const [users] = useState([
+  const [members] = useState([
     {
       id: 'P1',
       name: 'Jan Kowalski',
@@ -143,7 +143,7 @@ export default function ProjectDashboardPage() {
           className="flex gap-2 p-1 rounded-lg border"
           style={{ backgroundColor: 'var(--code-bg)', borderColor: 'var(--border)' }}
         >
-          {['backlog', 'users'].map((tab) => (
+          {['backlog', 'members'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -155,7 +155,7 @@ export default function ProjectDashboardPage() {
                 color: activeTab === tab ? 'var(--text-h)' : 'inherit'
               }}
             >
-              {tab === 'backlog' ? 'Backlog' : 'Użytkownicy'}
+              {tab === 'backlog' ? 'Backlog' : 'Członkowie'}
               
               
             </button>
@@ -168,11 +168,11 @@ export default function ProjectDashboardPage() {
         className="rounded-xl border overflow-hidden min-h-[300px] flex flex-col" 
         style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)', boxShadow: 'var(--shadow)' }}
       >
-        {activeTab === 'users' ? (
+        {activeTab === 'members' ? (
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}>
-                <th className="p-4 text-xs uppercase opacity-60">Użytkownik</th>
+                <th className="p-4 text-xs uppercase opacity-60">Członek</th>
                 <th className="p-4 text-xs uppercase opacity-60">Email</th>
                 <th className="p-4 text-xs uppercase opacity-60">Rola</th>
                 <th className="p-4 text-xs uppercase opacity-60">Liczba zadań</th>
@@ -180,7 +180,7 @@ export default function ProjectDashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, idx) => (
+              {members.map((user, idx) => (
                 <tr key={idx} className="border-b last:border-0 hover:bg-gray-50/50 transition-colors" style={{ borderColor: 'var(--border)' }}>
                   <td className="p-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xs" style={{ backgroundColor: 'var(--accent)' }}>
