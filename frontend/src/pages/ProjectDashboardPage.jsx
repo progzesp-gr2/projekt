@@ -205,7 +205,7 @@ export default function ProjectDashboardPage() {
           </table>
             
           ) : activeTab === 'backlog' ? (
-            <BacklogTab projectId={id} />
+            <BacklogTab projectId={id} programmers={members.filter(m => m.role === 'programista')} />
             //GET /api/projects/:id/backlog
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">

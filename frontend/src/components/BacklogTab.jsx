@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 
-export default function BacklogTab({projectId}) {
+export default function BacklogTab({ projectId, programmers }) {
 
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -130,19 +130,23 @@ export default function BacklogTab({projectId}) {
             }}
             />
 
-            <input
-            type="text"
-            value={newTaskAssignedTo}
-            onChange={(e) =>
-                setNewTaskAssignedTo(e.target.value)
-            }
-            placeholder="Osoba odpowiedzialna"
-            className="w-full px-4 py-2 mb-3 rounded border"
-            style={{
-                backgroundColor: 'var(--bg)',
-                borderColor: 'var(--border)',
-            }}
-            />
+            <select
+                value={newTaskAssignedTo}
+                onChange={(e) =>
+                    setNewTaskAssignedTo(e.target.value)
+                }
+                placeholder="Osoba odpowiedzialna"
+                className="w-full px-4 py-2 mb-3 rounded border"
+                style={{
+                    backgroundColor: 'var(--bg)',
+                    borderColor: 'var(--border)',
+                }}
+            >
+                <option value="">-</option>
+                {
+                    programmers.map((p) => <option key={p.id} value={p.name}>{ p.name }</option>)
+                }
+            </select>
 
             <select
             value={newTaskPriority}
