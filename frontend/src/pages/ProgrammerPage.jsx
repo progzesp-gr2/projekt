@@ -13,8 +13,8 @@ export default function ProgrammerPage() {
   };
 
   const [sprints] = useState([
-    { id: 1, name: 'Sprint 1', status: 'Aktywny' },
-    { id: 2, name: 'Sprint 2', status: 'Planowany' },
+    { id: 1, name: 'Sprint 1', status: 'Aktywny', startDate: '14.05.2026', endDate: '21.05.2026' },
+    { id: 2, name: 'Sprint 2', status: 'Planowany', startDate: '21.05.2026', endDate: '27.05.2026' },
   ]);
 
   const [tasks, setTasks] = useState([
@@ -87,11 +87,16 @@ export default function ProgrammerPage() {
 
               return (
                 <div key={sprint.id}>
-                  <div className="flex items-baseline gap-2 mb-3 pb-2 border-b" style={{ borderColor: 'var(--border)' }}>
-                    <h4 className="font-bold text-lg">{sprint.name}</h4>
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                      {sprint.status}
-                    </span>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mb-4 pb-3 border-b" style={{ borderColor: 'var(--border)' }}>
+                    <div className="flex items-baseline gap-2">
+                      <h4 className="font-bold text-lg">{sprint.name}</h4>
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                        {sprint.status}
+                      </span>
+                    </div>
+                    <div className="text-sm font-medium opacity-60">
+                      🗓️ {sprint.startDate} - {sprint.endDate}
+                    </div>
                   </div>
                   
                   <div className="space-y-3">
