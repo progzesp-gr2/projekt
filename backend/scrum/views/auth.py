@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import login, logout
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,36 +9,24 @@ from ..serializers import (
     UserSerializer,
 )
 
-User = get_user_model()
-
-
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        # Added explicit registration status response for the frontend:
-        # if the username already exists, return a clear message and flags
-        # without creating another user.
-        username = request.data.get('username')
-        if username and User.objects.filter(username=username).exists():
-            return Response(
-                {
-                    'message': 'User with this username already exists.',
-                    'user_exists': True,
-                    'user_created': False,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         serializer = self.get_serializer(data=request.data)
-        # Added structured validation failure response so the frontend can show
-        # a generic registration message and still inspect field-level errors.
+        # Structured validation failure response so the frontend can show a generic
+        # registration message and still inspect field-level errors.
         if not serializer.is_valid():
+            username_errors = serializer.errors.get('username', [])
+            user_exists = any(
+                getattr(error, 'code', None) == 'unique'
+                for error in username_errors
+            )
             return Response(
                 {
                     'message': 'User could not be created.',
-                    'user_exists': False,
+                    'user_exists': user_exists,
                     'user_created': False,
                     'errors': serializer.errors,
                 },
@@ -46,8 +34,7 @@ class RegisterView(generics.CreateAPIView):
             )
 
         user = serializer.save()
-        # Added success metadata while keeping user fields at the top level of
-        # the response, so existing clients can still read id/username/email.
+        # Send metadata while keeping user fields at the top level of the response.
         data = dict(UserSerializer(user).data)
         data['message'] = 'User created successfully.'
         data['user_exists'] = False
@@ -61,12 +48,19 @@ class LoginView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        # Added login failure message and boolean status for invalid credentials
-        # or missing fields, instead of returning only serializer errors.
         if not serializer.is_valid():
+            has_credentials = (
+                'username' not in serializer.errors
+                and 'password' not in serializer.errors
+            )
+            message = (
+                'Invalid username or password.'
+                if has_credentials
+                else 'Username and password are required.'
+            )
             return Response(
                 {
-                    'message': 'Invalid username or password.',
+                    'message': message,
                     'login_success': False,
                     'errors': serializer.errors,
                 },
@@ -74,8 +68,7 @@ class LoginView(generics.GenericAPIView):
             )
         user = serializer.validated_data['user']
         login(request, user)
-        # Added login success message and flag for the frontend after Django
-        # creates the authenticated session.
+        # Send success message and flag after creating the session.
         data = dict(UserSerializer(user).data)
         data['message'] = 'Login successful.'
         data['login_success'] = True
