@@ -1,8 +1,5 @@
 /**
- * To jest plik do routowania.
- * Bardzo ważne jest to że kiedy będzie tworzony endpoint
- * do przeglądania projektów przed product ownera to ważne żeby wyglądał on tak:
- * "/product-owner/project/:id"
+ * To jest plik do routowania - przesyła użytkownika na odpowiednią stronę po URLu.
  */
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/LoginPage';
