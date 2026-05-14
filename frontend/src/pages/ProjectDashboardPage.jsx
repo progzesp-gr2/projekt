@@ -205,7 +205,7 @@ export default function ProjectDashboardPage() {
           </table>
             
           ) : activeTab === 'backlog' ? (
-            <BacklogTab /> //<BacklogTab projectId={id} /> //W przyszłości żeby było wiadomo jaki projekt otworzyć
+            <BacklogTab projectId={id} />
             //GET /api/projects/:id/backlog
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
