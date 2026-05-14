@@ -127,7 +127,7 @@ class ApiAuthTestCase(TestCase):
 
         self.assertEqual(response.status_code, 400)
         rd = response.json()
-        # Verifies the new login failure payload for an unknown username.
+        # Verifies the login failure payload for an unknown username.
         self.assertEqual(rd['message'], 'Invalid username or password.')
         self.assertFalse(rd['login_success'])
 
@@ -136,6 +136,6 @@ class ApiAuthTestCase(TestCase):
 
         self.assertIn(response.status_code, (400, 401))
         rd = response.json()
-        # Verifies the new login failure payload for an incorrect password.
+        # Verifies the login failure payload for an incorrect password.
         self.assertEqual(rd['message'], 'Invalid username or password.')
         self.assertFalse(rd['login_success'])
