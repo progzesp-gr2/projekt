@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function ProgrammerPage() {
@@ -11,10 +12,18 @@ export default function ProgrammerPage() {
     members: ['Jan Kowalski', 'Anna Nowak', 'Piotr Zielinski'],
   };
 
-  const tasks = [
+  const [tasks, setTasks] = useState([
     { id: 1, title: 'Stworzyć ekran logowania', status: 'W trakcie' },
     { id: 2, title: 'Dodać walidację formularza', status: 'Do zrobienia' },
-  ];
+  ]);
+
+  const handleCompleteTask = (taskId) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, status: 'Ukończone' } : task
+      )
+    );
+  };
 
   return (
     <div className="flex-1 flex flex-col p-8 text-left bg-gray-50/30">
@@ -69,11 +78,27 @@ export default function ProgrammerPage() {
             {tasks.map((task) => (
               <div
                 key={task.id}
-                className="p-4 rounded-lg border"
+                className="p-4 rounded-lg border flex justify-between items-center"
                 style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
               >
-                <p className="font-bold">{task.title}</p>
-                <p className="text-sm opacity-60">Status: {task.status}</p>
+                <div>
+                  <p className="font-bold">{task.title}</p>
+                  <p className="text-sm mt-1">
+                    <span className="opacity-60">Status: </span>
+                    <span className={`font-medium ${task.status === 'Ukończone' ? 'text-green-500' : 'opacity-80'}`}>
+                      {task.status}
+                    </span>
+                  </p>
+                </div>
+                {task.status !== 'Ukończone' && (
+                  <button
+                    onClick={() => handleCompleteTask(task.id)}
+                    className="px-3 py-1.5 rounded-md text-xs font-bold text-white transition-opacity hover:opacity-90 cursor-pointer"
+                    style={{ backgroundColor: 'var(--accent)' }}
+                  >
+                    Zakończ
+                  </button>
+                )}
               </div>
             ))}
           </div>
