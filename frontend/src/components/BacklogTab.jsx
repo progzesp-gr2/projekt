@@ -70,30 +70,13 @@ export default function BacklogTab({projectId}) {
     setShowTaskForm(false);
     };
 
-  
-
-  const getPriorityStyle = (priority) => {
-    switch (priority.toLowerCase()) {
-
-        case 'ustaw priorytet':
-        return 'bg-gray-100 text-gray-700 border-gray-200';
-
-        case 'krytyczny':
-        return 'bg-red-100 text-red-700 border-red-200';
-
-        case 'poważny':
-        return 'bg-orange-100 text-orange-700 border-orange-200';
-
-        case 'średni':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-
-        case 'neutralny':
-        return 'bg-green-100 text-green-700 border-green-200';
-
-        default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-  };
+  const PRIORITIES = {
+    'ustaw priorytet': { style: 'bg-gray-100 text-gray-700 border-gray-200', text: 'Ustaw Priorytet' },
+    'krytyczny': { style: 'bg-red-100 text-red-700 border-red-200', text: 'Krytyczny' },
+    'poważny': { style: 'bg-orange-100 text-orange-700 border-orange-200', text: 'Poważny' },
+    'średni': { style: 'bg-yellow-100 text-yellow-700 border-yellow-200', text: 'Średni' },
+    'neutralny': { style: 'bg-green-100 text-green-700 border-green-200', text: 'Neutralny' },
+  }
 
   return (
     <div className="p-6">
@@ -172,25 +155,9 @@ export default function BacklogTab({projectId}) {
                 borderColor: 'var(--border)',
             }}
             >
-            <option value="ustaw priorytet">
-                Ustaw priorytet
-            </option>
-
-            <option value="krytyczny">
-                Krytyczny
-            </option>
-
-            <option value="poważny">
-                Poważny
-            </option>
-
-            <option value="średni">
-                Średni
-            </option>
-
-            <option value="neutralny">
-                Neutralny
-            </option>
+              {
+                Object.entries(PRIORITIES).map(([k, v]) => <option key={k} value={k}>{ v.text }</option>)
+              }
             </select>
 
             <button
@@ -243,17 +210,15 @@ export default function BacklogTab({projectId}) {
                         borderColor: 'var(--border)',
                         }}
                     >
-                        <option value="ustaw priorytet">Ustaw priorytet</option>
-                        <option value="krytyczny">Krytyczny</option>
-                        <option value="poważny">Poważny</option>
-                        <option value="średni">Średni</option>
-                        <option value="neutralny">Neutralny</option>
+                      {
+                        Object.entries(PRIORITIES).map(([k, v]) => <option key={k} value={k}>{ v.text }</option>)
+                      }
                     </select>
                     ) : (
                     <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold border ${getPriorityStyle(task.priority)}`}
+                        className={`px-3 py-1 rounded-full text-xs font-bold border ${PRIORITIES[task.priority]?.style}`}
                     >
-                        {task.priority}
+                        { PRIORITIES[task.priority]?.text ?? "-" }
                     </span>
                     )}
 
