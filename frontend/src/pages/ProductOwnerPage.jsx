@@ -119,7 +119,6 @@ export default function ProductOwnerPage() {
   };
 
   return (
-    //<div className="p-8 bg-gray-50/30 min-h-screen">
     <div
       className="p-8 min-h-screen"
       style={{ backgroundColor: 'var(--code-bg)' }}
