@@ -195,7 +195,7 @@ export default function BacklogTab({ projectId, programmers }) {
                     </h3>
 
                     <p className="text-sm opacity-60">
-                    Responsible: {task.assignedTo}
+                    Przypisane do: {task.assignedTo}
                     </p>
                 </div>
 
@@ -233,7 +233,7 @@ export default function BacklogTab({ projectId, programmers }) {
                         className="px-3 py-2 rounded text-white font-bold cursor-pointer"
                         style={{ backgroundColor: 'var(--accent)' }}
                     >
-                        Save
+                        Zapisz
                     </button>
                     ) : (
                     <button
@@ -243,7 +243,7 @@ export default function BacklogTab({ projectId, programmers }) {
                         borderColor: 'var(--border)',
                         }}
                     >
-                        Edit
+                        Edytuj
                     </button>
                     )}
 
