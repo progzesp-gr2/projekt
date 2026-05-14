@@ -23,12 +23,14 @@ export default function ScrumMasterPage() {
 
   // też roboczo
   const [sprints, setSprints] = useState([
-    { id: 1, name: 'Sprint 1', status: 'Aktywny' }
+    { id: 1, name: 'Sprint 1', status: 'Aktywny', startDate: '14.05.2026', endDate: '21.05.2026' }
   ]);
   const [isAddSprintModalOpen, setIsAddSprintModalOpen] = useState(false);
   const [newSprintName, setNewSprintName] = useState('');
   const [newSprintStatus, setNewSprintStatus] = useState('Planowany');
   const [editingSprintId, setEditingSprintId] = useState(null);
+  const [newSprintStartDate, setNewSprintStartDate] = useState('');
+  const [newSprintEndDate, setNewSprintEndDate] = useState('');
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -61,12 +63,16 @@ export default function ScrumMasterPage() {
       {
         id: Date.now(),
         name: newSprintName.trim(),
-        status: newSprintStatus
+        status: newSprintStatus,
+        startDate: newSprintStartDate,
+        endDate: newSprintEndDate,
       }
     ]);
 
     setNewSprintName('');
     setNewSprintStatus('Planowany');
+    setNewSprintStartDate('');
+    setNewSprintEndDate('');
     setIsAddSprintModalOpen(false);
   };
 
@@ -122,6 +128,12 @@ export default function ScrumMasterPage() {
   const handleChangeTaskType = (taskId, newType) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? { ...task, type: newType } : task))
+    );
+  };
+
+  const handleChangeSprintDate = (sprintId, field, newDate) => {
+    setSprints((prevSprints) =>
+      prevSprints.map((sprint) => (sprint.id === sprintId ? { ...sprint, [field]: newDate } : sprint))
     );
   };
 
@@ -200,6 +212,13 @@ export default function ScrumMasterPage() {
               >
                 <h2 className="text-xl font-bold mb-1">{sprint.name}</h2>
                 <p className="text-sm opacity-60">Status: <span className="font-medium">{sprint.status}</span></p>
+
+                {(sprint.startDate || sprint.endDate) && (
+                  <p className="text-xs font-medium opacity-60 mt-2">
+                    🗓️ {sprint.startDate || '?'} - {sprint.endDate || '?'}
+                  </p>
+                )}
+
                 <div className="absolute top-4 right-4 flex gap-1">
                   <button
                     type="button"
@@ -478,7 +497,8 @@ export default function ScrumMasterPage() {
                 &times;
               </button>
             </div>
-            
+
+            {/* Nazwa sprintu */}
             <form onSubmit={handleAddSprint}>
               <div className="mb-5">
                 <h4 className="font-bold text-sm mb-2 opacity-70">Nazwa sprintu:</h4>
@@ -493,6 +513,31 @@ export default function ScrumMasterPage() {
                 />
               </div>
 
+              {/* Kalendarz sprintu */}
+              <div className="mb-5 flex gap-4">
+                <div className="flex-1">
+                  <h4 className="font-bold text-sm mb-2 opacity-70">Data rozpoczęcia:</h4>
+                  <input
+                    type="date"
+                    value={newSprintStartDate}
+                    onChange={(e) => setNewSprintStartDate(e.target.value)}
+                    className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2 cursor-pointer text-sm"
+                    style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-sm mb-2 opacity-70">Data zakończenia:</h4>
+                  <input
+                    type="date"
+                    value={newSprintEndDate}
+                    onChange={(e) => setNewSprintEndDate(e.target.value)}
+                    className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2 cursor-pointer text-sm"
+                    style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Status sprintu */}
               <div className="mb-8">
                 <h4 className="font-bold text-sm mb-2 opacity-70">Status:</h4>
                 <div className="flex flex-wrap gap-2">
@@ -555,6 +600,32 @@ export default function ScrumMasterPage() {
                 &times;
               </button>
             </div>
+
+            {/* Kalendarz sprintu */}
+            <div className="mb-6 flex gap-4">
+              <div className="flex-1">
+                <h4 className="font-bold text-sm mb-2 opacity-70">Data rozpoczęcia:</h4>
+                <input
+                  type="date"
+                  value={sprints.find((s) => s.id === editingSprintId)?.startDate || ''}
+                  onChange={(e) => handleChangeSprintDate(editingSprintId, 'startDate', e.target.value)}
+                  className="w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 cursor-pointer text-sm"
+                  style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
+                />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm mb-2 opacity-70">Data zakończenia:</h4>
+                <input
+                  type="date"
+                  value={sprints.find((s) => s.id === editingSprintId)?.endDate || ''}
+                  onChange={(e) => handleChangeSprintDate(editingSprintId, 'endDate', e.target.value)}
+                  className="w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 cursor-pointer text-sm"
+                  style={{ borderColor: 'var(--border)', backgroundColor: 'var(--code-bg)' }}
+                />
+              </div>
+            </div>
+
+            {/* Status sprintu */}
             <div className="mb-8">
               <h4 className="font-bold text-sm mb-2 opacity-70">Status:</h4>
               <div className="flex flex-wrap gap-2">

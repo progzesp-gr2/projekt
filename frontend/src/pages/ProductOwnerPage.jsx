@@ -235,7 +235,7 @@ export default function ProductOwnerPage() {
                           backgroundColor: 'var(--accent)',
                         }}
                       >
-                        Open
+                        Otwórz
                       </button>
 
                       <button
