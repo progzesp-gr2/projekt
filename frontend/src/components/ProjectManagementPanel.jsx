@@ -1,12 +1,15 @@
 /**
- * Panel zarządzania projektami:
- * - tworzenie projektów
- * - dodawanie programistów
- * 
- * To jest wyświetlane kiedy product owner będzie chciał dodać projekt.
+ * Panel zarządzania projektami.
+ *
+ * Product Owner może:
+ * - tworzyć projekty
+ * - dodawać programistów do projektu
+ *
+ * Komponent wyświetlany tylko dla Product Ownera.
  */
 
 export default function ProjectManagementPanel({
+
   programmers,
   selectedProject,
 
@@ -18,10 +21,13 @@ export default function ProjectManagementPanel({
 
   handleCreateProject,
   handleAddProgrammer,
+
 }) {
 
   return (
     <div className="space-y-6">
+
+      {/* CREATE PROJECT */}
       <form
         onSubmit={handleCreateProject}
         className="p-5 rounded-xl border"
@@ -32,10 +38,19 @@ export default function ProjectManagementPanel({
         }}
       >
 
-        <h3 className="font-bold mb-4">
-          Utwórz nowy projekt
-        </h3>
+        <div className="mb-5">
 
+          <h3 className="font-bold text-lg">
+            Utwórz nowy projekt
+          </h3>
+
+          <p className="text-sm opacity-60">
+            Dodaj nowy projekt do systemu
+          </p>
+
+        </div>
+
+        {/* PROJECT NAME */}
         <input
           type="text"
           value={newProjectName}
@@ -50,20 +65,24 @@ export default function ProjectManagementPanel({
           }}
         />
 
+        {/* PROJECT DESCRIPTION */}
         <textarea
           value={newProjectDescription}
           onChange={(e) =>
-            setNewProjectDescription(e.target.value)
+            setNewProjectDescription(
+              e.target.value
+            )
           }
           placeholder="Opis projektu"
           rows="3"
-          className="w-full px-4 py-2 mb-3 rounded border resize-none"
+          className="w-full px-4 py-2 mb-4 rounded border resize-none"
           style={{
             backgroundColor: 'var(--code-bg)',
             borderColor: 'var(--border)',
           }}
         />
 
+        {/* SUBMIT */}
         <button
           type="submit"
           className="w-full py-2 rounded-lg font-bold text-white cursor-pointer"
@@ -76,6 +95,7 @@ export default function ProjectManagementPanel({
 
       </form>
 
+      {/* ADD PROGRAMMERS */}
       <div
         className="p-5 rounded-xl border"
         style={{
@@ -85,18 +105,34 @@ export default function ProjectManagementPanel({
         }}
       >
 
-        <h3 className="font-bold mb-4">
-          Dodaj programistę
-        </h3>
+        <div className="mb-5">
+
+          <h3 className="font-bold text-lg">
+            Dodaj programistę
+          </h3>
+
+          <p className="text-sm opacity-60">
+            Dodaj użytkowników do wybranego projektu
+          </p>
+
+        </div>
 
         {!selectedProject ? (
-          <p className="text-sm opacity-60">
-            Wybierz projekt
-          </p>
+
+          <div
+            className="p-4 rounded-lg border text-sm opacity-60"
+            style={{
+              borderColor: 'var(--border)',
+              backgroundColor: 'var(--code-bg)',
+            }}
+          >
+            Najpierw wybierz projekt z listy
+          </div>
 
         ) : (
 
           <div className="space-y-3">
+
             {programmers.map((programmer) => {
 
               const alreadyAdded =
@@ -111,10 +147,14 @@ export default function ProjectManagementPanel({
                   className="p-3 rounded border flex justify-between items-center"
                   style={{
                     borderColor: 'var(--border)',
+                    backgroundColor:
+                      'var(--code-bg)',
                   }}
                 >
 
+                  {/* USER INFO */}
                   <div>
+
                     <p className="font-bold text-sm">
                       {programmer.name}
                     </p>
@@ -125,7 +165,9 @@ export default function ProjectManagementPanel({
 
                   </div>
 
+                  {/* ADD BUTTON */}
                   <button
+                    type="button"
                     onClick={() =>
                       handleAddProgrammer(
                         selectedProject.id,
@@ -133,19 +175,21 @@ export default function ProjectManagementPanel({
                       )
                     }
                     disabled={alreadyAdded}
-                    className={`px-3 py-1 rounded text-xs font-bold text-white ${
+                    className={`px-3 py-1 rounded text-xs font-bold text-white transition-opacity ${
                       alreadyAdded
                         ? 'opacity-40 cursor-not-allowed'
-                        : 'cursor-pointer'
+                        : 'cursor-pointer hover:opacity-90'
                     }`}
                     style={{
-                      backgroundColor: 'var(--accent)',
+                      backgroundColor:
+                        'var(--accent)',
                     }}
                   >
                     {alreadyAdded
                       ? 'Dodany'
                       : 'Dodaj'}
                   </button>
+
                 </div>
               );
             })}
