@@ -275,22 +275,10 @@ export default function ProjectSelectionPage({
                   }
                   className={`p-6 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? 'ring-2'
-                      : ''
+                      ? 'ring-2 ring-purple-500 shadow-md'
+                      : 'hover:bg-gray-50/50'
                   }`}
-                  style={{
-                    backgroundColor:
-                      'var(--bg)',
-
-                    borderColor:
-                      'var(--border)',
-
-                    boxShadow:
-                      'var(--shadow)',
-
-                    ringColor:
-                      'var(--accent)',
-                  }}
+                  style={{ backgroundColor: 'var(--bg)', borderColor: isSelected ? 'var(--accent)' : 'var(--border)' }}
                 >
 
                   <div className="flex justify-between items-start">
