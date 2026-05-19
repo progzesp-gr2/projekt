@@ -271,7 +271,7 @@ export default function ProjectSelectionPage({
                       project.id
                     )
                   }
-                  className={`p-6 rounded-xl border transition-all cursor-pointer ${
+                  className={`p-6 rounded-xl border transition-all ${role === "product_owner" ? "cursor-pointer" : ""} ${
                     isSelected
                       ? 'ring-2 ring-purple-500 shadow-md'
                       : 'hover:bg-gray-50/50'
