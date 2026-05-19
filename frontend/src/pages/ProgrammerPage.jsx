@@ -41,13 +41,29 @@ export default function ProgrammerPage() {
           <p className="text-sm opacity-60">Twoje projekty i zadania</p>
         </div>
 
-        <button
-          onClick={() => navigate('/login')}
-          className="px-4 py-2 rounded-md border text-sm font-medium cursor-pointer"
-          style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
-        >
-          Wyloguj
-        </button>
+        <div className="flex gap-3">
+          <button
+              onClick={() => navigate('/programmer')}
+              className="px-4 py-2 rounded-md border text-sm font-medium hover:bg-gray-100 transition-all cursor-pointer"
+              style={{
+                borderColor: 'var(--border)',
+                backgroundColor: 'var(--bg)',
+              }}
+              >
+              ← Projekty
+          </button>
+
+          <button
+            onClick={() => navigate('/login')}
+            className="px-4 py-2 rounded-md border text-sm font-medium cursor-pointer"
+            style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
+            >
+            Wyloguj
+          </button>
+
+        </div>
+
+        
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
