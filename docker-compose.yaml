@@ -1,0 +1,77 @@
+name: scrum-board
+
+volumes:
+  traefik-certs:
+
+networks:
+  scrum-board:
+
+services:
+  backend:
+    build:
+      context: ./backend/
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=False
+    restart: always
+    networks:
+      - scrum-board
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`${HOST}`) && PathRegexp(`^/(api|admin)`)
+      - traefik.http.routers.backend.entrypoints=https
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=letsencrypt
+      - traefik.http.routers.backend.tls.domains[0].main=${HOST}
+      - traefik.http.services.backend.loadbalancer.server.port=8000
+
+  frontend:
+    build:
+      context: ./frontend/
+    restart: always
+    networks:
+      - scrum-board
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${HOST}`)
+      - traefik.http.routers.frontend.entrypoints=https
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.tls.certresolver=letsencrypt
+      - traefik.http.routers.frontend.tls.domains[0].main=${HOST}
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+
+  traefik:
+    image: traefik:v3.7
+    restart: always
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    volumes:
+      - ./certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - scrum-board
+    environment:
+      - "${TRAEFIK_DNS_PROVIDER_API_KEY_NAME}=${TRAEFIK_DNS_PROVIDER_API_KEY}"
+    command:
+      - "--log.level=INFO"
+      - "--accesslog=false"
+      - "--metrics.prometheus=false"
+      - "--api.dashboard=false"
+      - "--api.insecure=false"
+      - "--global.checkNewVersion=true"
+      - "--global.sendAnonymousUsage=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.http.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.https.address=:443"
+      - "--entrypoints.https.http.tls=true"
+      - "--entrypoints.https.http.tls.certResolver=letsencrypt"
+      - "--entrypoints.https.http.tls.domains[0].main=${HOST}"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--certificatesResolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge=true"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge.provider=${ACME_DNS_PROVIDER}"
+      - "--certificatesResolvers.letsencrypt.acme.storage=/certs/certs.json"
