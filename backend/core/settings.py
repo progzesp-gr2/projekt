@@ -43,7 +43,10 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", _DEBUG_SECRET_KEY)
 if not DEBUG and SECRET_KEY.startswith("django-insecure"):
     raise ValueError("missing DJANGO_SECRET_KEY, but DEBUG mode is off")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
 
 
 # Application definition

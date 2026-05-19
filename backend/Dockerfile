@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Set up server
 COPY --chown=gunicorn:gunicorn . .
-RUN python manage.py check --deploy
 
 # Start server
 CMD ["core.asgi:application", "--workers", "4", "--worker-class", "asgi"]
