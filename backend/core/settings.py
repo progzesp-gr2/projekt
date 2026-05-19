@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+
+def parse_bool(string: any, default: bool | None = None) -> bool:
+    match str(string).lower().strip():
+        case "1" | "t" | "true" | "p" | "prawda" | "y" | "yes" | "t" | "tak":
+            return True
+        case "0" | "f" | "false" | "falsz" | "fałsz" | "n" | "no" | "nie":
+            return False
+        case _ if default == None:
+            raise ValueError(f"unable to parse bool from '{string}'")
+        case _:
+            return default
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,13 +33,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-##bw^k*ul)p(x14z1(9r1%@qm8s&#5%q-722f*%9x6l)98l0wf'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = parse_bool(os.environ.get("DJANGO_DEBUG"), True)
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: keep the secret key used in production secret!
+_DEBUG_SECRET_KEY = "django-insecure-##bw^k*ul)p(x14z1(9r1%@qm8s&#5%q-722f*%9x6l)98l0wf"
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", _DEBUG_SECRET_KEY)
+if not DEBUG and SECRET_KEY.startswith("django-insecure"):
+    raise ValueError("missing DJANGO_SECRET_KEY, but DEBUG mode is off")
+
+ALLOWED_HOSTS = ["*"]
+
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_TRUSTED_ORIGINS = [os.environ.get("DJANGO_ORIGIN", "http://localhost:8000")]
 
 
 # Application definition
@@ -75,9 +98,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.environ.get("DJANGO_DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DJANGO_DB_NAME", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("DJANGO_DB_USER"),
+        "PASSWORD": os.environ.get("DJANGO_DB_PASSWORD"),
+        "HOST": os.environ.get("DJANGO_DB_HOST"),
+        "PORT": os.environ.get("DJANGO_DB_PORT"),
     }
 }
 
@@ -116,7 +143,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "backend-static/"
+STATIC_ROOT = "backend-static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

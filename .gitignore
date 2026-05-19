@@ -1,3 +1,7 @@
+/.vscode/
+/certs/
+.env
+
 # Python
 __pycache__/
 *.py[cod]
