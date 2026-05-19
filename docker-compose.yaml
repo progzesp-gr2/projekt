@@ -31,6 +31,22 @@ services:
       - traefik.http.routers.backend.tls.domains[0].main=${HOST}
       - traefik.http.services.backend.loadbalancer.server.port=8000
 
+  backend-static:
+    build:
+      context: ./backend/
+      dockerfile: staticfiles.Dockerfile
+    restart: always
+    networks:
+      - scrum-board
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend-static.rule=Host(`${HOST}`) && PathPrefix(`/backend-static`)
+      - traefik.http.routers.backend-static.entrypoints=https
+      - traefik.http.routers.backend-static.tls=true
+      - traefik.http.routers.backend-static.tls.certresolver=letsencrypt
+      - traefik.http.routers.backend-static.tls.domains[0].main=${HOST}
+      - traefik.http.services.backend-static.loadbalancer.server.port=80
+
   frontend:
     build:
       context: ./frontend/
