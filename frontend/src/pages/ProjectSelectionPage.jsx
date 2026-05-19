@@ -261,9 +261,7 @@ export default function ProjectSelectionPage({
 
             {projects.map((project) => {
 
-              const isSelected =
-                selectedProjectId ===
-                project.id;
+              const isSelected = selectedProjectId === project.id && role === "product_owner";
 
               return (
                 <div
