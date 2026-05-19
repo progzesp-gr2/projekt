@@ -48,6 +48,8 @@ ALLOWED_HOSTS = ["*"]
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 
+CSRF_TRUSTED_ORIGINS = [os.environ.get("DJANGO_ORIGIN", "http://localhost:8000")]
+
 
 # Application definition
 
